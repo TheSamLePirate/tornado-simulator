@@ -32,6 +32,8 @@ croissants. L'enveloppe extérieure bleue marque « là où ça tourne » ;
 l'enveloppe intérieure orange indique le cœur en rotation violente.
 Le sol est en bas, la base du nuage serait juste au-dessus du cadre.*
 
+*▶ Preset app : « Tube de vorticité (iso) »*
+
 Le tube est **étroit mais haut** — typiquement 50 à 500 m de diamètre,
 sur plusieurs kilomètres de hauteur. À l'intérieur du tube, les vents
 peuvent dépasser 100 m/s (échelons EF4–EF5 sur l'échelle de Fujita
@@ -46,6 +48,8 @@ verticale, c'est la concentration de rotation au cœur. Au sol, on voit
 l'**anneau** correspondant — c'est la signature du mur de l'œil au
 ras du sol. Les stries pâles qui descendent le long du tube trahissent
 la structure hélicoïdale fine de l'écoulement turbulent.*
+
+*▶ Preset app : « Coupe de |ω| »*
 
 ---
 
@@ -63,6 +67,8 @@ L'**anneau** lumineux est le mur de l'œil — une bande étroite où la
 vitesse atteint son maximum. À l'extérieur de l'anneau, le vent
 décroît ; à l'intérieur, il décroît aussi vers un cœur quasi immobile.
 C'est le profil du **tourbillon de Rankine combiné**.*
+
+*▶ Preset app : « V_θ (vue du dessus) »*
 
 Le rayon de cet anneau est l'un des deux nombres qui définissent une
 tornade : **`R_max`** — la distance entre l'axe et le pic de vent.
@@ -84,6 +90,8 @@ l'afflux :
 (air se dirigeant vers l'axe), rouge = sortie (absente ici). L'air au
 ras du sol est aspiré **vers l'intérieur** depuis toutes les directions.*
 
+*▶ Preset app : « V_r (vue du dessus) »*
+
 Cet afflux doit bien aller quelque part — et comme il ne peut
 s'accumuler sur l'axe, il monte. La tornade est essentiellement un
 gigantesque tube aspirant : convergence horizontale au sol, courant
@@ -100,6 +108,8 @@ rose** au centre est le courant ascendant qui propulse l'air aspiré
 par l'afflux jusque dans le nuage convectif. À S = 0,75 (juste
 au-dessus du seuil bicellulaire), la concentration est déjà très
 serrée le long de l'axe.*
+
+*▶ Preset app : « V_z par défaut »*
 
 ---
 
@@ -119,6 +129,8 @@ l'axe du tourbillon est le déficit cyclostrophique, où ΔP ≈ −ρ · V_max�
 À V_max = 95 m/s avec ρ ≈ 1,2 kg/m³, cela donne environ −110 hPa —
 soit **environ 10 % de moins que la pression atmosphérique au niveau
 de la mer**, dans une colonne d'à peine 50 m de large.*
+
+*▶ Preset app : « Déficit de pression »*
 
 C'est ce déficit qui détruit réellement les bâtiments : les vents
 violents tirent sur la structure pendant que la chute de pression
@@ -145,6 +157,8 @@ abaisse la pression au point que la condensation y descend en
 **entonnoir** quasiment jusqu'au sol. C'est précisément la silhouette
 caractéristique d'une tornade.*
 
+*▶ Preset app : « Funnel (nuage condensé) »*
+
 L'humidité ambiante détermine la hauteur du LCL — plus l'air est
 sec, plus le LCL est haut, plus le funnel reste « accroché » au
 nuage et ne touche pas le sol. Une tornade dans de l'air sec est
@@ -170,6 +184,8 @@ l'écoulement à chaque pixel. Le slab horizontal au sol donne la cible
 classique : mur de l'œil lumineux, œil sombre, halo qui s'estompe
 dans la zone d'afflux.*
 
+*▶ Preset app : « |V| + LIC »*
+
 C'est exactement ce que donnerait une superposition radar
 Doppler réflectivité-et-vitesse d'une vraie tornade, à beaucoup plus
 fine résolution.
@@ -193,6 +209,8 @@ le tourbillon dans un régime différent.
 l'air monte partout le long de l'axe. Le tube est laminaire, la
 colonne est un courant ascendant continu et homogène.*
 
+*▶ Preset app : « V_z à S = 0.4 (unicellulaire) »*
+
 **Swirl plus élevé (S = 0,85) — colonne étroite et concentrée :**
 
 ![Coupe verticale de la vitesse verticale à S=0,85 — courant ascendant beaucoup plus intense et focalisé](illustrations/two-cell-high-S.png)
@@ -204,6 +222,8 @@ de la colonne deviendrait en réalité **négatif** — un courant
 descendant plongeant le long de l'axe pendant que l'ascendance
 migrerait vers un anneau juste à l'extérieur. C'est l'iconique
 structure « bicellulaire ».*
+
+*▶ Preset app : « V_z à S = 0.85 (bicellulaire) »*
 
 ---
 
@@ -226,6 +246,8 @@ lumineux, on voit **plusieurs taches lumineuses arrangées en
 spirale** — chacune un sous-tourbillon. La coupe verticale révèle
 que le tube est passé d'une colonne lisse à une texture striée,
 presque peignée, à mesure que les sous-tourbillons remontent.*
+
+*▶ Preset app : « Multi-tourbillonnaire (S = 1.2) »*
 
 Les tornades d'El Reno (2013), de Hackleburg (2011) et de
 Greensburg (2007) ont toutes été observées en configuration
