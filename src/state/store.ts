@@ -14,7 +14,8 @@ export type ScientificField =
   | "vz"
   | "pressure"
   | "vorticity"
-  | "cloud";
+  | "cloud"
+  | "temperature";
 
 interface AppState {
   viewMode: ViewMode;
@@ -154,6 +155,7 @@ export const useAppStore = create<AppState>((set) => ({
     pressure: 0.4,
     vorticity: 0.45,
     cloud: 0.6,
+    temperature: 0.8,
   },
   setFieldScale: (f, v) =>
     set((s) => ({ fieldScale: { ...s.fieldScale, [f]: v } })),

@@ -41,6 +41,10 @@ interface Props {
   vMaxRef?: number;
   /** Rmax used as length normalization reference (for vorticity). */
   rMaxRef?: number;
+  /** Surface temperature (K). Used to scale the temperature deviation field. */
+  T0Ref?: number;
+  /** Surface pressure (Pa). Used to scale the temperature deviation field. */
+  P0Ref?: number;
   /**
    * Multiplier on the colormap saturation range. <1 = tighter range = more
    * contrast on subtle features; >1 = wider range = avoids hard clipping.
@@ -92,6 +96,8 @@ export function SimSlice({
   worldScale = 0.001,
   vMaxRef = 100,
   rMaxRef = 200,
+  T0Ref = 293.15,
+  P0Ref = 101325,
   scale = 1.0,
   showContours = false,
   contourCount = 6,
@@ -234,13 +240,42 @@ export function SimSlice({
         .clamp(float(0), float(1));
       tFinal = t;
       colorNode = magmaTSL(t);
-    } else {
-      // cloud
+    } else if (field === "cloud") {
       const rhoC: TSLNode = texture3D(cloud, coord).r;
       // Dense tornado wall-cloud LWC ≈ 5e-4 kg/m³ as a soft cap.
       const t = rhoC.div(5e-4 * safeScale).clamp(float(0), float(1));
       tFinal = t;
       colorNode = plasmaTSL(t);
+    } else {
+      // ── temperature deviation ──
+      // Linearised perturbation around the dry-adiabatic profile at this
+      // altitude:  ΔT ≈ T₀ · (R/cp) · ΔP_pa / P₀
+      // Equivalent to a small-perturbation expansion of T = T₀·(p/P₀)^0.286.
+      // ΔP_pa is the kinematic pressure deviation (referenced against an
+      // upper-corner ambient sample, same convention as the pressure slice)
+      // converted to Pa via ρ_air. Result in K.
+      // Sign·sqrt perceptual compression matches the pressure slice — keeps
+      // small variations visible without crushing the saturated core.
+      const R_OVER_CP = 0.286;
+      const rhoAirRef = P0Ref / (287.058 * T0Ref);
+      const dPraw: TSLNode = texture3D(pressure, coord).r;
+      const dPamb: TSLNode = texture3D(pressure, vec3(0.05, 0.05, 0.95)).r;
+      const dPkin: TSLNode = dPraw.sub(dPamb);
+      const dPpa: TSLNode = dPkin.mul(float(rhoAirRef));
+      const dT: TSLNode = dPpa
+        .mul(float(R_OVER_CP))
+        .mul(float(T0Ref))
+        .div(float(P0Ref));
+      const dTscale = 15 * safeScale; // K
+      const sgn: TSLNode = dT.sign();
+      const tMag: TSLNode = dT
+        .abs()
+        .div(Math.max(dTscale, 1e-6))
+        .sqrt()
+        .clamp(float(0), float(1));
+      const t: TSLNode = sgn.mul(tMag);
+      tFinal = t;
+      colorNode = RdBuTSL(t);
     }
 
     // ── LIC: line-integral convolution ──
@@ -314,6 +349,8 @@ export function SimSlice({
     position,
     vMaxRef,
     rMaxRef,
+    T0Ref,
+    P0Ref,
     safeScale,
     grid,
     uShowContours,

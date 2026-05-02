@@ -226,6 +226,8 @@ function SimContent() {
             position={sliceXZ}
             vMaxRef={params.Vmax}
             rMaxRef={params.Rmax}
+            T0Ref={params.T0}
+            P0Ref={params.P0}
             scale={fieldScale[field] ?? 1.0}
             showContours={showContours}
             contourCount={contourCount}
@@ -246,6 +248,8 @@ function SimContent() {
             position={sliceXY}
             vMaxRef={params.Vmax}
             rMaxRef={params.Rmax}
+            T0Ref={params.T0}
+            P0Ref={params.P0}
             scale={fieldScale[field] ?? 1.0}
             showContours={showContours}
             contourCount={contourCount}

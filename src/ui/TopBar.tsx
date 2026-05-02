@@ -18,6 +18,7 @@ const FIELD_OPTIONS: Array<{ id: ScientificField; label: string }> = [
   { id: "pressure", label: "ΔP" },
   { id: "vorticity", label: "|ω|" },
   { id: "cloud", label: "cloud" },
+  { id: "temperature", label: "T'" },
 ];
 
 type ToggleKey =

@@ -1,174 +1,204 @@
-# Tornado Simulator
+# Simulateur de tornade
 
-> 🌪️ **Live demo**: <https://tornade-simulation.puter.site/>
+> 🌪️ **Démo en direct** : <https://tornade-simulation.puter.site/>
 
-Scientifically defensible browser-based tornado simulator built on
-**Bun + Vite + React + TypeScript + Three.js (WebGPURenderer)**.
+Simulateur de tornade scientifiquement crédible, entièrement dans le
+navigateur, basé sur **Bun + Vite + React + TypeScript + Three.js
+(WebGPURenderer)**.
 
-A real **3D LES (Large-Eddy Simulation)** of the Navier–Stokes
-equations on a Cartesian grid, with subgrid Smagorinsky closure,
-log-law wall model, and Dirichlet swirling-inflow boundary conditions
-calibrated to user parameters (V_max, R_max, swirl ratio S). Dual
-visualization: a **realistic** volumetric funnel + ground debris, and a
-**scientific** CFD-post-processor view (slice planes / multi-iso
-vorticity shells / vector glyphs / streamlines / volumetric ω) for any
-of seven physical fields.
+Une vraie **simulation 3D LES (Large-Eddy Simulation)** des équations
+de Navier–Stokes sur grille cartésienne, avec fermeture sous-maille
+de Smagorinsky, modèle de paroi en loi log, et conditions limites
+d'afflux tourbillonnant Dirichlet calibrées sur les paramètres
+utilisateur (V_max, R_max, rapport de swirl S). Double visualisation :
+un mode **réaliste** avec funnel volumétrique + débris au sol, et un
+mode **scientifique** style post-processeur CFD (plans de coupe /
+isosurfaces multi-enveloppes de vorticité / glyphes vectoriels /
+streamlines / volumétrique de ω) pour chacun des sept champs
+physiques.
 
-📖 Vulgarisation explainer: [English](docs/tornado-explainer.md) ·
-[Français](docs/tornado-explainer.fr.md)
+---
 
-## Run
+## 🎓 Comprendre comment fonctionne une tornade
+
+Le projet est livré avec **un dossier de vulgarisation illustré** qui
+explique pas à pas la physique d'une tornade en utilisant les sorties
+réelles du simulateur comme illustrations. Chaque figure est une vraie
+capture du canvas WebGPU — pas un schéma de manuel.
+
+📖 **Lire le dossier** :
+- 🇫🇷 [Comment fonctionne une tornade — version française](docs/tornado-explainer.fr.md)
+- 🇬🇧 [How a tornado works — English version](docs/tornado-explainer.md)
+
+Le dossier couvre 10 sections : ce qu'est une tornade, la signature
+en rotation, l'afflux et l'ascendance, le déficit de pression
+cyclostrophique, la formation du nuage funnel visible, la
+visualisation du flux par LIC, les régimes uni / bicellulaires, les
+tornades multi-tourbillonnaires, les ingrédients atmosphériques
+nécessaires, et comment lire le HUD du simulateur.
+
+### 🎬 Voir chaque figure en direct via les presets
+
+Chaque illustration de la doc a un **preset correspondant dans
+l'application**. La marche à suivre :
+
+1. Ouvrir <https://tornade-simulation.puter.site/>
+2. Lire la doc en parallèle
+3. Pour chaque figure, repérer la ligne `▶ Preset app : « ... »` sous
+   la légende
+4. Dans l'app, dérouler le menu **« 📷 Doc preset… »** dans la barre
+   du haut et choisir le preset correspondant
+5. L'app applique automatiquement les bons paramètres (V_max, S, RH,
+   etc.), bascule sur le bon champ scientifique, allume/éteint les bons
+   calques de visualisation, place la caméra sur le bon angle, et
+   re-seed le solveur depuis l'IC de Burgers–Rott
+6. Après ~10 secondes de stabilisation, l'écran montre **la même chose
+   que la figure**, mais en 3D, navigable à la souris (OrbitControls),
+   et avec les vrais paramètres modifiables en direct dans le panneau
+   Leva
+
+C'est l'usage premier de cette app : un **support de vulgarisation
+interactif** qui permet de manipuler une tornade au lieu de juste lire
+sa description. Augmenter le rapport de swirl en direct et voir le
+courant ascendant unique se transformer en un anneau au-dessus d'un
+courant descendant central — c'est plus parlant que n'importe quel
+schéma.
+
+---
+
+## Lancer l'app localement
 
 ```bash
-bun install      # already done if you cloned with deps
+bun install      # déjà fait si vous avez cloné avec les deps
 bun dev          # http://localhost:5173
 bun run build    # tsc -b && vite build
 ```
 
-Requires WebGPU: Chrome / Edge ≥ 113, Safari (macOS Tahoe / iOS 26+),
-Firefox ≥ 147. The app shows a friendly fallback otherwise.
+Nécessite WebGPU : Chrome / Edge ≥ 113, Safari (macOS Tahoe / iOS 26+),
+Firefox ≥ 147. Un écran de fallback s'affiche sinon.
 
 ## Architecture
 
-The full design lives in
-`~/.claude/plans/create-a-super-accurate-glimmering-swan.md`. Key pieces
-already wired:
+Le solveur tourne entièrement sur le GPU via TSL (Three Shading
+Language) en compute kernels. Les pièces principales :
 
-- **`src/sim/grid.ts`** — 2 km × 2 km × 1.5 km domain, resolution
-  presets Low 64³ / Medium 96³ / High 128³ / Ultra 192³.
-- **`src/sim/params.ts`** — live parameters (Rmax, Vmax, swirl ratio,
-  inflow, z₀, T/P/RH, storm motion, tilt, Cs, vorticity confinement) +
-  atmospheric helpers (ρ, e_sat via August-Roche-Magnus, z_LCL).
-- **`src/sim/BurgersRott.ts`** — analytical seeder. Tangential profile
-  `v_θ(r) = Vmax · (Rmax/r) · (1 − e^(−α r²/Rmax²)) / (1 − e^(−α))`
-  with α ≈ 1.25643 (root of `(2α + 1) = e^α`), so the maximum sits
-  exactly at r = Rmax. Vertical stretching `w = 2az` and radial inflow
-  `v_r = −ar` close the divergence-free axisymmetric flow. 1% white
-  noise breaks symmetry to allow multi-vortex/helical instabilities to
-  develop once the LES is running.
-- **`src/sim/Resources.ts`** — `Data3DTexture` allocator (Float32 RGBA).
-  Will grow to manage all ping-pong textures once the solver lands.
-- **`src/scene/SimSlice.tsx`** — TSL slice renderer using `texture3D` +
-  the viridis colormap.
-- **`src/state/simulator-context.tsx`** — provides GPU resources +
-  params to the scene tree.
+- **`src/sim/grid.ts`** — domaine 2 km × 2 km × 1,5 km, presets de
+  résolution Low 64³ / Medium 96³ / High 128³ / Ultra 192³.
+- **`src/sim/params.ts`** — paramètres en direct (Rmax, Vmax, S, V_in,
+  z₀, T/P/RH, déplacement, inclinaison, Cs, confinement de vorticité,
+  chaleur latente) + helpers atmosphériques (ρ, e_sat via
+  August-Roche-Magnus, z_LCL).
+- **`src/sim/Solver.ts`** — solveur LES complet : advection
+  semi-lagrangienne RK2 (BFECC-friendly), divergence, Jacobi pression
+  rouge-noir × 14, soustraction du gradient de pression, fermeture
+  Smagorinsky-Lilly, confinement de vorticité, boucle de rétroaction
+  par chaleur latente couplée à la condensation.
+- **`src/sim/Particles.ts`** — système de particules de débris/poussière
+  GPU avec sédimentation de Stokes et stries de motion blur.
+- **`src/sim/Reductions.ts`** — réductions parallèles (max |V|, min ΔP,
+  max |ω|) avec readback async pour la validation HUD.
+- **`src/scene/`** — composition de scène, slices, isosurfaces,
+  volumétriques, streamlines, glyphes.
+- **`src/state/store.ts`** — store Zustand : viewMode, field, params,
+  toggles de calques, valeurs de sliders, presets de scène.
+- **`src/presets/scenePresets.ts`** — manifeste des presets de la doc
+  (un par illustration, avec params + caméra).
 
-## Milestones
+## Statut
 
-- [x] **M1** — scaffold + WebGPU detection + r3f Canvas
-- [x] **M2** — solver skeleton + analytical IC + slice viz
-- [x] **M3** — solver loop: GPU IC kernel, semi-Lagrangian advection,
-  divergence, Jacobi pressure (×20), gradient subtract, lateral
-  swirl-inflow Dirichlet (sponge) + ground no-slip BCs.
-- [ ] **M4** — Smagorinsky LES closure + multigrid V-cycle + vorticity
-  confinement + adaptive CFL substepping (BFECC)
-- [x] **M5** — realistic volumetric ray-march funnel: condensation
-  derived field (Magnus + dry-adiabatic), Beer-Lambert extinction,
-  density-gradient lighting, sun + ambient, height tint, transparent
-  composite. Toggleable with scientific view.
-- [ ] **M6** — debris particle system (wall-shear emission, Stokes drag)
-- [ ] **M7** — scientific view: slice already wired (M2). Still need
-  isosurface, vector glyphs, full 7-field selector + colormap LUTs +
-  HTML colorbar.
-- [x] **M8** — Top-bar (view toggle, scientific field selector, pause,
-  re-seed). Leva params panel (Core / Boundary / Atmosphere / Motion /
-  Solver). HUD with EF badge, Vmax in m/s & mph, R_max, swirl, V_in,
-  z₀, T, RH.
-- [ ] **M9** — validation HUD (cyclostrophic balance, two-cell
-  indicator, mass conservation) + perf tuning
+Tout est livré. Initialement organisé en 9 milestones (M1–M9) et un
+chantier de polish "post-M9" pour les shaders scientifiques :
 
-## Capture pipeline
+- [x] **M1–M3** — scaffold WebGPU, IC analytique, boucle solveur
+  (advection / divergence / projection / BCs)
+- [x] **M4** — fermeture LES Smagorinsky-Lilly + confinement de
+  vorticité + sous-cycles CFL adaptatifs
+- [x] **M5** — funnel volumétrique réaliste (condensation, Beer-Lambert,
+  éclairage, ombre cone-tracée, bruit FBM swirling)
+- [x] **M6** — système de particules de débris (sédimentation Stokes,
+  stries de motion blur, anneau de poussière)
+- [x] **M7** — vue scientifique complète (slice XZ + XY, multi-iso de
+  vorticité, glyphes vectoriels, streamlines avec animation comet,
+  contours, LIC, fade par magnitude, volumétrique ω, colorbar HTML)
+- [x] **M8** — UI complète (TopBar, HUD avec badge EF, panneau Leva,
+  re-seed)
+- [x] **M9** — HUD de validation avec readback GPU (mesuré vs cible)
 
-Programmatic PNG capture of the live WebGPU scene — for generating
-documentation figures. Drives the running app (no OS screenshots,
-no separate render path) via Playwright + headless Chromium.
+Plus, post-livraison : pipeline de capture PNG via Playwright +
+chromium headless, presets reliés à la doc, doc bilingue.
+
+## Pipeline de capture PNG
+
+Capture programmatique du canvas WebGPU vivant — pour générer les
+figures de la doc. Pilote l'app en cours d'exécution (pas de
+screenshot OS, pas de chemin de rendu séparé) via Playwright +
+chromium headless.
 
 ### Quick start
 
 ```bash
-# Terminal 1 — dev server
+# Terminal 1 — serveur de dev
 bun dev
 
-# Terminal 2 — capture a single shot
+# Terminal 2 — capturer un shot prédéfini
 bun capture --recipe vorticity-tube-iso
 
-# Or run all 9 predefined shots into docs/illustrations/
+# Ou lancer toutes les recettes vers docs/illustrations/
 bun capture --all
 
-# Or fully custom (mirrors the URL-param API)
+# Ou tout en custom (reflète l'API URL)
 bun capture \
-  --view scientific --field vorticity --show-iso \
+  --view scientific --field vorticity --show-iso 1 \
   --vmax 100 --swirl 0.85 --rh 0.92 \
   --camera-az 35 --camera-elev 25 --camera-dist 1.4 \
   --w 1280 --h 720 --settle 240 \
   --out docs/illustrations/custom.png
 ```
 
-### How it works
+### Comment ça marche
 
-When the app sees `?capture=1` on its URL it:
+Quand l'app voit `?capture=1` dans son URL, elle :
 
-1. Reads every other recognised query param from `src/capture/url.ts` and
-   pushes them into the zustand store (e.g. `?Vmax=120&swirlRatio=1.0`).
-2. Hides every UI overlay (TopBar, HUD, Colorbar, ParamPanel, Stats).
-3. Forces a fixed canvas size (`?w=…&h=…`, default 1280×720) and bumps
-   `dpr` to 2 for crisp output.
-4. Re-seeds the solver so the Burgers-Rott IC matches the URL params.
-5. Runs `?settle=N` solver frames (default 240 ≈ 12 s sim time at the
-   built-in `timeScale=15`), then auto-pauses and sets
-   `window.__simReady = true`.
+1. Lit chaque paramètre de query string reconnu dans `src/capture/url.ts`
+   et le pousse dans le store Zustand (ex. `?Vmax=120&swirlRatio=1.0`).
+2. Cache toutes les overlays UI (TopBar, HUD, Colorbar, ParamPanel,
+   Stats).
+3. Force une taille de canvas fixe (`?w=…&h=…`, défaut 1280×720) et
+   passe le `dpr` à 2 pour des sorties crisp.
+4. Re-seed le solveur pour que l'IC corresponde aux paramètres URL.
+5. Tourne `?settle=N` frames (défaut 240 ≈ 12 s de temps simulé), puis
+   met l'app en pause et place le drapeau `window.__simReady = true`.
 
-The Playwright script in `scripts/capture.ts` polls for that flag, then
-either calls `window.__sceneSnapshot()` (preferred — `canvas.toBlob` PNG)
-or falls back to `page.locator('canvas').screenshot()`.
+Le script Playwright dans `scripts/capture.ts` poll ce drapeau, puis
+appelle soit `window.__sceneSnapshot()` (chemin préféré — PNG via
+`canvas.toBlob`), soit `page.locator('canvas').screenshot()` en
+secours.
 
-### URL parameter reference
+### Recettes prédéfinies
 
-All `SimParams` keys are accepted verbatim: `Vmax`, `Rmax`, `swirlRatio`,
-`inflow`, `z0`, `T0`, `P0`, `RH`, `Ustorm`, `Vstorm`, `tilt`, `Cs`,
-`vortConfine`, `latentHeat`.
+`scripts/capture-recipes.ts` définit 9 shots nommés (`funnel-wide-side`,
+`vorticity-tube-iso`, `pressure-deficit-slice`,
+`two-cell-low-S` / `two-cell-high-S`, `lcl-low-rh` / `lcl-high-rh`,
+`multi-vortex-high-S`, `speed-LIC`).
 
-View / scientific knobs: `viewMode`, `field`, `paused`, `sliceXZ`,
-`sliceXY`, `isoValue`, `isoShellCount`, `isoShellSpread`, `showIso`,
-`showGlyphs`, `showStreamlines`, `showContours`, `contourCount`,
-`showLIC`, `licStrength`, `magnitudeFadeAlpha`, `fadeFloor`,
-`showVortVolume`, `vortVolumeDensity`.
+Pour ajouter un shot, ajoutez-le au tableau `RECIPES` de ce fichier.
 
-Camera (spherical): `cameraAz` (°), `cameraElev` (°), `cameraDist`
-(× max box dim). Boolean flags accept `1` / `true` / `on`.
+## Stack technique
 
-### Recipes
-
-`scripts/capture-recipes.ts` defines 9 named shots covering the most
-useful illustrations: `funnel-wide-side`, `vorticity-tube-iso`,
-`pressure-deficit-slice`, `two-cell-low-S` / `two-cell-high-S`,
-`lcl-low-rh` / `lcl-high-rh`, `multi-vortex-high-S`, `speed-LIC`.
-
-Add a new shot by appending to that file's `RECIPES` array.
-
-### Intended workflow with an AI assistant
-
-1. Ask Claude to write a tornado-physics primer / vulgarisation doc.
-2. Claude drafts prose and identifies ~6–10 illustrative figures.
-3. For each figure, Claude runs `bun capture --recipe …` (or a custom
-   `bun capture --view … --vmax … --out …`).
-4. Claude reads each PNG (multimodal) and embeds it as
-   `![](docs/illustrations/foo.png)` in the markdown doc.
-
-The PNGs are real WebGPU output, so any future shader work or simulator
-upgrade is reflected automatically — no separate render path to maintain.
-
-## Stack
-
-| Concern | Choice |
+| Concern | Choix |
 | --- | --- |
 | Runtime | Bun |
 | Bundler | Vite 8 |
 | Renderer | three.js r0.184 `WebGPURenderer` (`three/webgpu`) |
-| Compute / shaders | TSL (`three/tsl`) — node graphs + raw WGSL when needed |
+| Compute / shaders | TSL (`three/tsl`) — graphes de nodes + WGSL brut au besoin |
 | React glue | `@react-three/fiber` v9 + `@react-three/drei` |
-| Postprocessing | `@react-three/postprocessing` (M5+) |
-| UI panels | leva (M8) |
-| State | zustand (M8) |
-| Lint/format | biome |
-| Tests | vitest (M9 sanity checks) |
+| Post-processing | `@react-three/postprocessing` |
+| Panneau de paramètres | Leva |
+| State | Zustand |
+| Lint / format | Biome |
+| Tests | Vitest |
+| Capture headless | Playwright (chromium) |
+
+## Licence
+
+(à préciser)

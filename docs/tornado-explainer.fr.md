@@ -138,7 +138,50 @@ tente d'arracher la toiture.
 
 ---
 
-## 5. Le nuage funnel — pourquoi on voit la tornade
+## 5. Conséquence directe — le refroidissement adiabatique
+
+Le déficit de pression du chapitre précédent a une autre conséquence,
+et c'est elle qui rend la tornade visible : **quand un gaz se détend,
+il se refroidit**. C'est la loi de l'adiabatique sèche, qu'on apprend
+au lycée et qui décrit ce qui se passe à chaque instant dans
+l'atmosphère.
+
+Mathématiquement, pour un gaz parfait subissant une transformation
+sans échange de chaleur :
+
+```
+T_local = T₀ · (p_local / p_référence)^(R/c_p)
+```
+
+avec R/c_p ≈ 0,286 pour l'air sec. Concrètement : si la pression
+chute de 10 % à température constante d'origine, la température
+chute d'environ 3 %. Au cœur d'une tornade EF4 où ΔP atteint −100 hPa
+(soit −10 % de la pression atmosphérique normale), cela donne
+**ΔT ≈ −9 K**.
+
+On peut directement visualiser ce refroidissement dans le simulateur :
+
+![Coupe de l'écart de température — colonne magenta vif sur l'axe représentant le point froid causé par le déficit de pression](illustrations/temperature-cold-spot.png)
+
+*Coupe XZ et slab XY de la déviation de température T' (par rapport
+à l'isentrope sèche locale). Bleu = plus froid, rouge = plus chaud.
+La **colonne magenta-bleue** sur l'axe est exactement la même région
+que la colonne bleue de la coupe de pression précédente — ce sont
+deux visualisations du même phénomène : la décompression centripète
+qui refroidit l'air en montant le long du tube. Les zones
+décolorées autour ont une déviation proche de zéro.*
+
+*▶ Preset app : « T' (refroidissement adiabatique) »*
+
+Comparez les deux presets dans l'app : « Déficit de pression » et
+« T' (refroidissement adiabatique) » montrent la même structure
+spatiale dans deux palettes différentes. C'est la **cause** (la
+chute de pression) et l'**effet** (la chute de température),
+strictement liés par l'équation ci-dessus.
+
+---
+
+## 6. Le nuage funnel — pourquoi on voit la tornade
 
 Le déficit de pression a une conséquence visible : l'air qui spirale
 vers l'axe se détend en montant ; en se détendant, il refroidit ; et
@@ -167,7 +210,7 @@ soulevé au sol trahit son existence.
 
 ---
 
-## 6. La vue d'ensemble (visualisation par LIC)
+## 7. La vue d'ensemble (visualisation par LIC)
 
 Jusqu'ici, nous avons découpé le vent en V_θ, V_r, V_z — mais le
 flux réel est une spirale tourbillonnante combinant les trois. En
@@ -192,7 +235,7 @@ fine résolution.
 
 ---
 
-## 7. Unicellulaire vs bicellulaire — le **rapport de swirl**
+## 8. Unicellulaire vs bicellulaire — le **rapport de swirl**
 
 Détail subtil mais important : toutes les tornades ne se ressemblent
 pas à l'intérieur. Il existe un paramètre de contrôle, le **rapport
@@ -227,7 +270,7 @@ structure « bicellulaire ».*
 
 ---
 
-## 8. Éclatement tourbillonnaire — ce que font les tornades les plus violentes
+## 9. Éclatement tourbillonnaire — ce que font les tornades les plus violentes
 
 Si l'on pousse le rapport de swirl assez haut (S ≈ 1,2 ici), le
 courant descendant central du tourbillon bicellulaire devient
@@ -255,7 +298,7 @@ multi-tourbillonnaire pendant leurs phases les plus violentes.
 
 ---
 
-## 9. La recette résumée
+## 10. La recette résumée
 
 Pour fabriquer une vraie tornade, il faut :
 
@@ -284,7 +327,7 @@ que les tornades soient relativement peu fréquentes.
 
 ---
 
-## 10. Comment lire le HUD du simulateur
+## 11. Comment lire le HUD du simulateur
 
 Une fois la simulation lancée et le tourbillon formé, le HUD en bas
 à gauche affiche une section « Validation — mesuré vs cible » qui

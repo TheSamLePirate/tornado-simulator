@@ -75,6 +75,14 @@ const FIELDS: Record<ScientificField, FieldMeta> = {
     description:
       "Cloud water density. Condensation forms above the lifting condensation level (LCL) where moist air cools adiabatically. Brighter = denser visible funnel.",
   },
+  temperature: {
+    name: "T'",
+    unit: "K",
+    cmap: "rdbu",
+    range: () => [-10, 10],
+    description:
+      "Temperature deviation from the dry-adiabatic profile, linearised: ΔT ≈ T₀·(R/cp)·ΔP/P₀. Blue cold spot at the vortex axis = adiabatic cooling driven by the pressure deficit. Red = warm regions (rare in the core).",
+  },
 };
 
 function fmtVal(v: number): string {

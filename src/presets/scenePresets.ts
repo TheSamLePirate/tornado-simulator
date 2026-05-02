@@ -227,6 +227,24 @@ export const SCENE_PRESETS: ScenePreset[] = [
     cameraDist: 1.4,
   },
   {
+    id: "temperature-cold-spot",
+    label: "T' (refroidissement adiabatique)",
+    description:
+      "Coupe de l'écart de température — point froid bleu sur l'axe causé par le déficit de pression.",
+    viewMode: "scientific",
+    field: "temperature",
+    showIso: false,
+    showStreamlines: false,
+    showLIC: false,
+    magnitudeFadeAlpha: true,
+    fadeFloor: 0.05,
+    sliceXZ: 0.5,
+    sliceXY: 0.05,
+    cameraAz: 35,
+    cameraElev: 20,
+    cameraDist: 1.4,
+  },
+  {
     id: "multi-vortex-high-S",
     label: "Multi-tourbillonnaire (S = 1.2)",
     description:
