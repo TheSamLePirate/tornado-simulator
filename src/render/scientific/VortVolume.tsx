@@ -85,11 +85,11 @@ export function VortVolume({
     const boxMin: TSLNode = vec3(-halfWx, 0, -halfWy);
     const boxMax: TSLNode = vec3(halfWx, Wz, halfWy);
 
-    // sim X = worldX, sim Y = worldZ, sim Z = worldY-up
+    // simX→worldX, simZ→worldY-up, simY→-worldZ (sign flip preserves RH).
     const worldToUV = (p: TSLNode): TSLNode =>
       vec3(
         p.x.add(halfWx).div(Wx),
-        p.z.add(halfWy).div(Wy),
+        p.z.negate().add(halfWy).div(Wy),
         p.y.div(Wz),
       ) as TSLNode;
 

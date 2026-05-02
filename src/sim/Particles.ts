@@ -52,13 +52,19 @@ export class Particles {
   readonly uSpawnZmax = uniform(80.0);
   /** Hash seed bumped each frame so respawn positions decorrelate. */
   readonly uSeed = uniform(1.0);
+  /**
+   * Stokes settling velocity, m/s. Particle motion = flow_velocity + (0,0,-w_s).
+   * Typical for dust ≈ 50 µm: 0.07 m/s. Larger debris (sand, leaves): 0.5–2 m/s.
+   * 0 disables settling (purely flow-following).
+   */
+  readonly uSettling = uniform(0.05);
 
   private velocityTex: Storage3DTexture;
   private initKernel: TSLNode;
   private stepKernel: TSLNode;
   private hasInitialised = false;
 
-  constructor(grid: GridSpec, velocityTex: Storage3DTexture, count = 10_000) {
+  constructor(grid: GridSpec, velocityTex: Storage3DTexture, count = 20_000) {
     this.grid = grid;
     this.count = count;
     this.velocityTex = velocityTex;
@@ -175,7 +181,15 @@ export class Particles {
         vec3(uClamp, vClamp, wClamp),
       ).xyz;
 
-      const advanced: TSLNode = pos.add(vel.mul(this.uDt));
+      // Stokes settling: in the dust-grain regime, drag relaxes the particle
+      // to flow velocity within milliseconds, leaving a steady fall offset
+      // w_s relative to air. Modeled as a constant downward bias.
+      const effVel: TSLNode = vec3(
+        vel.x,
+        vel.y,
+        vel.z.sub(this.uSettling),
+      ) as TSLNode;
+      const advanced: TSLNode = pos.add(effVel.mul(this.uDt));
       const newAge: TSLNode = age.add(this.uDt);
 
       // Respawn if out of domain or aged out

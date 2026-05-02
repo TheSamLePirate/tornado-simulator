@@ -92,11 +92,11 @@ export function VolumetricFunnel({
     const boxMax: TSLNode = vec3(halfWx, Wz, halfWy);
 
     // Map a world point → 3D texture UV.
-    // sim X = worldX, sim Y = worldZ, sim Z = worldY.
+    // simX→worldX, simZ→worldY-up, simY→-worldZ (sign flip preserves RH).
     const worldToTexUV = (p: TSLNode): TSLNode =>
       vec3(
         p.x.add(halfWx).div(Wx),
-        p.z.add(halfWy).div(Wy),
+        p.z.negate().add(halfWy).div(Wy),
         p.y.div(Wz),
       ) as TSLNode;
 

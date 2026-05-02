@@ -186,7 +186,14 @@ function SimContent() {
             Wz={Wz}
             steps={48}
           />
-          <ParticleField particles={particles} worldScale={WORLD_SCALE} />
+          <ParticleField
+            particles={particles}
+            velocityTex={solver.velocity[0]}
+            Lx={grid.Lx}
+            Ly={grid.Ly}
+            Lz={grid.Lz}
+            worldScale={WORLD_SCALE}
+          />
           <RainCurtain Wx={Wx} Wy={Wy} Wz={Wz} />
           <GroundDust Wx={Wx} Wy={Wy} Wz={Wz} />
         </>

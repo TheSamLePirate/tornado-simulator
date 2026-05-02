@@ -18,8 +18,11 @@ export function SolverDriver({ timeScale = 15, maxSubsteps = 2 }: Props) {
   const { gl } = useThree();
   const solver = useAppStore((s) => s.solver);
   const particles = useAppStore((s) => s.particles);
+  const reductions = useAppStore((s) => s.reductions);
+  const setMeasured = useAppStore((s) => s.setMeasured);
   const stepping = useRef(false);
   const frameSeed = useRef(1);
+  const reductionFrame = useRef(0);
   /** Even-frame counter — solver only runs when this is 0 (every other frame). */
   const solverPhase = useRef(0);
 
@@ -91,6 +94,21 @@ export function SolverDriver({ timeScale = 15, maxSubsteps = 2 }: Props) {
             frameSeed.current;
           await particles.step(renderer);
         }
+
+        // Reductions for HUD validation. Dispatch the kernel every 6 frames
+        // (≈10 Hz) and fire-and-forget the readback — it's async and may
+        // resolve a few frames later, which is fine for a HUD readout.
+        reductionFrame.current = (reductionFrame.current + 1) % 6;
+        if (reductionFrame.current === 0) {
+          await reductions.dispatch(renderer);
+          // No await: readback runs in the background; when it resolves it
+          // pushes the new measured values into the store so the HUD sees
+          // them on the next React render tick.
+          void reductions.readback(renderer).then(() => {
+            setMeasured({ ...reductions.latest });
+          });
+        }
+        reductions.tick();
       } finally {
         stepping.current = false;
       }

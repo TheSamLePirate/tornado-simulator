@@ -3,6 +3,7 @@ import { DEFAULT_PARAMS, type SimParams } from "../sim/params";
 import { makeGrid, type GridSpec, type QualityPreset } from "../sim/grid";
 import { Solver } from "../sim/Solver";
 import { Particles } from "../sim/Particles";
+import { Reductions, type ReductionResult } from "../sim/Reductions";
 
 export type ViewMode = "realistic" | "scientific";
 export type ScientificField =
@@ -34,6 +35,10 @@ interface AppState {
   grid: GridSpec;
   solver: Solver;
   particles: Particles;
+  reductions: Reductions;
+  /** Latest GPU-readback measured values for HUD validation. */
+  measured: ReductionResult;
+  setMeasured: (m: ReductionResult) => void;
 
   // Scientific view controls
   sliceXZ: number;
@@ -89,6 +94,12 @@ const initialPreset: QualityPreset = "medium";
 const initialGrid = makeGrid(initialPreset);
 const initialSolver = new Solver(initialGrid);
 const initialParticles = new Particles(initialGrid, initialSolver.velocity[0]);
+const initialReductions = new Reductions(
+  initialGrid,
+  initialSolver.velocity[0],
+  initialSolver.pressure[0],
+  initialSolver.vorticityTex,
+);
 
 export const useAppStore = create<AppState>((set) => ({
   viewMode: "scientific",
@@ -105,6 +116,9 @@ export const useAppStore = create<AppState>((set) => ({
   grid: initialGrid,
   solver: initialSolver,
   particles: initialParticles,
+  reductions: initialReductions,
+  measured: initialReductions.latest,
+  setMeasured: (m) => set({ measured: m }),
 
   sliceXZ: 0.5,
   sliceXY: 0.05,

@@ -122,14 +122,15 @@ export function Streamlines({
         const speed: TSLNode = vel0.length().max(float(0.1));
 
         // Store world-space position + speed.
-        // World axes: X = simX, Y(up) = simZ, Z = simY.
+        // World axes: X = simX, Y(up) = simZ, Z = -simY (sign flip preserves
+        // right-handedness so sim CCW renders as world CCW from above).
         buf
           .element(bufIdx)
           .assign(
             vec4(
               px.mul(worldScale),
               pz.mul(worldScale),
-              py.mul(worldScale),
+              py.negate().mul(worldScale),
               speed,
             ) as TSLNode,
           );
@@ -137,10 +138,10 @@ export function Streamlines({
         // RK4 on the unit-velocity field.
         const k1: TSLNode = vel0.div(speed);
 
-        // Write tangent in world axes (sim X→worldX, simZ→worldY-up, simY→worldZ).
+        // Write tangent in world axes (same negate-Y remap as position).
         tanBuf
           .element(bufIdx)
-          .assign(vec4(k1.x, k1.z, k1.y, float(0)) as TSLNode);
+          .assign(vec4(k1.x, k1.z, k1.y.negate(), float(0)) as TSLNode);
 
         const k2: TSLNode = sampleVelN(
           px.add(k1.x.mul(halfDs)),
@@ -240,7 +241,7 @@ export function Streamlines({
 
     const m = new InstancedMesh(geo, mat, TOTAL_PTS);
     m.frustumCulled = false;
-    m.renderOrder = 6;
+    m.renderOrder = 9;
 
     return { traceKernel: kernel, mesh: m };
   }, [velocityTex, Wx, Wy, Wz, vMaxRef, Lx, Ly, Lz, worldScale]);

@@ -85,11 +85,12 @@ export function Isosurface({
     const boxMin: TSLNode = vec3(-halfWx, 0, -halfWy);
     const boxMax: TSLNode = vec3(halfWx, Wz, halfWy);
 
-    // World → tex UV (same axis remap as VolumetricFunnel).
+    // World → tex UV. Inverse of the simX→worldX, simZ→worldY-up, simY→-worldZ
+    // remap (negation on the Y/Z swap preserves right-handedness).
     const worldToUV = (p: TSLNode): TSLNode =>
       vec3(
         p.x.add(halfWx).div(Wx),
-        p.z.add(halfWy).div(Wy),
+        p.z.negate().add(halfWy).div(Wy),
         p.y.div(Wz),
       ) as TSLNode;
 

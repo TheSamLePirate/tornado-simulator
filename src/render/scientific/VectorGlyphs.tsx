@@ -68,16 +68,17 @@ export function VectorGlyphs({ velocityTex, Wx, Wy, Wz, vMaxRef }: Props) {
     const v: TSLNode = float(iy).add(0.5).div(NY);
     const w: TSLNode = float(iz).add(0.5).div(NZ);
 
-    // World position (sim X→worldX, sim Y→worldZ, sim Z→worldY up).
+    // World position (sim X→worldX, simZ→worldY-up, simY→-worldZ; the sign
+    // flip on Y preserves right-handedness so sim CCW renders as world CCW).
     const worldX: TSLNode = u.sub(0.5).mul(Wx);
     const worldY: TSLNode = w.mul(Wz);
-    const worldZ: TSLNode = v.sub(0.5).mul(Wy);
+    const worldZ: TSLNode = float(0.5).sub(v).mul(Wy);
 
     // ── Sample velocity and remap to world axes ──
     const vel: TSLNode = texture3D(velocityTex, vec3(u, v, w));
     const speed: TSLNode = vel.w.max(float(0.01));
-    // sim (vx,vy,vz) → world (vx, vz, vy)
-    const worldVel: TSLNode = vec3(vel.x, vel.z, vel.y);
+    // sim (vx, vy, vz) → world (vx, vz, -vy)  — match position remap.
+    const worldVel: TSLNode = vec3(vel.x, vel.z, vel.y.negate());
     const dir: TSLNode = normalize(worldVel) as TSLNode;
 
     // ── Build orthonormal basis: dir replaces cone's Y axis ──

@@ -142,12 +142,7 @@ export function SimSlice({
   const material = useMemo(() => {
     const mat = new MeshBasicNodeMaterial({
       transparent: true,
-      // Write depth in vivid regions only (alpha > alphaTest). Faded regions
-      // are discarded entirely → don't occlude volumes / iso behind them.
-      // This is the key fix that lets VortVolume composite correctly behind
-      // the slice without the two layers "fighting" for screen-z ordering.
-      depthWrite: true,
-      alphaTest: 0.5,
+      depthWrite: false,
       side: THREE.DoubleSide,
     });
 
@@ -332,13 +327,18 @@ export function SimSlice({
 
   const rotation: [number, number, number] =
     axis === "xz" ? [0, 0, 0] : [-Math.PI / 2, 0, 0];
-  // XZ slice: vertical plane that slides along world-Z (= sim Y).
+  // XZ slice: vertical plane that slides along world-Z (= -sim Y under the
+  // RH-preserving remap). Negated relative to the previous mapping.
   // XY slice: horizontal plane that slides along world-Y (= sim Z, up).
   const yOffset = axis === "xz" ? Wz / 2 : position * Wz;
-  const zOffset = axis === "xz" ? (position - 0.5) * Wy : 0;
+  const zOffset = axis === "xz" ? (0.5 - position) * Wy : 0;
 
   return (
-    <mesh rotation={rotation} position={[0, yOffset, zOffset]} renderOrder={2}>
+    <mesh
+      rotation={rotation}
+      position={[0, yOffset, zOffset]}
+      renderOrder={axis === "xz" ? 7 : 7.1}
+    >
       <planeGeometry args={planeArgs} />
       <primitive object={material} attach="material" />
     </mesh>
