@@ -1,14 +1,21 @@
 # Tornado Simulator
 
+> 🌪️ **Live demo**: <https://tornade-simulation.puter.site/>
+
 Scientifically defensible browser-based tornado simulator built on
 **Bun + Vite + React + TypeScript + Three.js (WebGPURenderer)**.
 
-> **Status:** M1 + M2 of 9 milestones complete. The app boots, detects
-> WebGPU, seeds an analytical Burgers–Rott vortex on a 96 × 96 × 72
-> grid, and renders a vertical XZ slice + a near-ground horizontal slab
-> of velocity magnitude using a viridis colormap via TSL. The full LES
-> solver, volumetric render, debris, scientific view, UI panel, and
-> validation HUD are not yet wired in — see *Milestones* below.
+A real **3D LES (Large-Eddy Simulation)** of the Navier–Stokes
+equations on a Cartesian grid, with subgrid Smagorinsky closure,
+log-law wall model, and Dirichlet swirling-inflow boundary conditions
+calibrated to user parameters (V_max, R_max, swirl ratio S). Dual
+visualization: a **realistic** volumetric funnel + ground debris, and a
+**scientific** CFD-post-processor view (slice planes / multi-iso
+vorticity shells / vector glyphs / streamlines / volumetric ω) for any
+of seven physical fields.
+
+📖 Vulgarisation explainer: [English](docs/tornado-explainer.md) ·
+[Français](docs/tornado-explainer.fr.md)
 
 ## Run
 

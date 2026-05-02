@@ -1,5 +1,14 @@
 # Comment fonctionne une tornade
 
+> 🌪️ **Démo en direct** : <https://tornade-simulation.puter.site/>
+> &nbsp; · &nbsp;
+> 📦 **Code source** : <https://github.com/TheSamLePirate/tornado-simulator>
+>
+> Chaque illustration de cette doc a un **preset correspondant** dans
+> l'application — utilisez le menu déroulant "📷 Doc preset…" en haut
+> de l'app pour voir n'importe quelle figure en direct, navigable à
+> la souris, avec les vrais paramètres derrière.
+
 Une explication illustrée à partir des sorties en direct du simulateur.
 Chaque image ci-dessous est une vraie capture PNG du canvas WebGPU —
 pas de schéma, pas d'illustration de manuel. Ce que vous voyez,

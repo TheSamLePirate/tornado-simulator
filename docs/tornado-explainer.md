@@ -1,5 +1,13 @@
 # How a tornado works
 
+> 🌪️ **Live demo**: <https://tornade-simulation.puter.site/>
+> &nbsp; · &nbsp;
+> 📦 **Source**: <https://github.com/TheSamLePirate/tornado-simulator>
+>
+> Every illustration in this doc has a **matching preset** in the app —
+> use the "📷 Doc preset…" dropdown at the top of the app to view any
+> figure live, mouse-orbitable, with the actual parameters behind it.
+
 A visual primer using live output from this simulator. Every image below
 is a real PNG dumped straight off the WebGPU canvas — no diagrams, no
 textbook plates. What you see is what the Navier–Stokes solver
