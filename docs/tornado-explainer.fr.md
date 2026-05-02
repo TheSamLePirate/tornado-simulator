@@ -28,6 +28,16 @@ sur plusieurs kilomètres de hauteur. À l'intérieur du tube, les vents
 peuvent dépasser 100 m/s (échelons EF4–EF5 sur l'échelle de Fujita
 améliorée).
 
+Vu en coupe plutôt qu'en isosurface, le même tube ressemble à ça :
+
+![Coupe verticale et horizontale de |ω| — colonne magenta vif au centre, anneau lumineux au sol, légères stries hélicoïdales montant le long du tube](illustrations/vorticity-slice.png)
+
+*Coupes XZ et XY de la vorticité. La **colonne magenta** sur la coupe
+verticale, c'est la concentration de rotation au cœur. Au sol, on voit
+l'**anneau** correspondant — c'est la signature du mur de l'œil au
+ras du sol. Les stries pâles qui descendent le long du tube trahissent
+la structure hélicoïdale fine de l'écoulement turbulent.*
+
 ---
 
 ## 2. La signature : rotation autour d'un axe vertical
@@ -70,6 +80,18 @@ s'accumuler sur l'axe, il monte. La tornade est essentiellement un
 gigantesque tube aspirant : convergence horizontale au sol, courant
 ascendant vertical jusque dans l'orage parent.
 
+Ce courant ascendant se voit directement sur la composante verticale
+du vent V_z :
+
+![Coupe de V_z — colonne rose-rouge intense au centre montant droite, anneau circulaire au sol, halo blanc autour](illustrations/vz-default.png)
+
+*Vitesse verticale V_z aux paramètres par défaut (V_max = 95 m/s,
+S = 0,75). Rose/rouge = ascendance, blanc = quasi calme. La **colonne
+rose** au centre est le courant ascendant qui propulse l'air aspiré
+par l'afflux jusque dans le nuage convectif. À S = 0,75 (juste
+au-dessus du seuil bicellulaire), la concentration est déjà très
+serrée le long de l'axe.*
+
 ---
 
 ## 4. Le déficit de pression (et pourquoi l'air se précipite)
@@ -95,7 +117,34 @@ tente d'arracher la toiture.
 
 ---
 
-## 5. La vue d'ensemble (visualisation par LIC)
+## 5. Le nuage funnel — pourquoi on voit la tornade
+
+Le déficit de pression a une conséquence visible : l'air qui spirale
+vers l'axe se détend en montant ; en se détendant, il refroidit ; et
+en refroidissant suffisamment, sa vapeur d'eau **se condense**. C'est
+ce qui rend la tornade visible — un nuage en forme d'entonnoir
+descend depuis la base du nuage convectif jusqu'au sol.
+
+![Coupe verticale du champ de densité d'eau condensée — nuage rose étendu en haut qui se rétrécit en un funnel magenta vif descendant jusqu'au sol](illustrations/cloud-side-view.png)
+
+*Coupe XZ de la densité d'eau condensée ρ_c (colormap plasma).
+Le **plafond rose** uniforme, c'est la base du nuage convectif au-dessus
+du **niveau de condensation par soulèvement** (LCL). En dessous, l'air
+est trop chaud et trop sec pour qu'il y ait de la condensation —
+sauf le long de l'axe du tourbillon, où le déficit cyclostrophique
+abaisse la pression au point que la condensation y descend en
+**entonnoir** quasiment jusqu'au sol. C'est précisément la silhouette
+caractéristique d'une tornade.*
+
+L'humidité ambiante détermine la hauteur du LCL — plus l'air est
+sec, plus le LCL est haut, plus le funnel reste « accroché » au
+nuage et ne touche pas le sol. Une tornade dans de l'air sec est
+donc en grande partie **invisible** : seul le nuage de poussière
+soulevé au sol trahit son existence.
+
+---
+
+## 6. La vue d'ensemble (visualisation par LIC)
 
 Jusqu'ici, nous avons découpé le vent en V_θ, V_r, V_z — mais le
 flux réel est une spirale tourbillonnante combinant les trois. En
@@ -118,7 +167,7 @@ fine résolution.
 
 ---
 
-## 6. Unicellulaire vs bicellulaire — le **rapport de swirl**
+## 7. Unicellulaire vs bicellulaire — le **rapport de swirl**
 
 Détail subtil mais important : toutes les tornades ne se ressemblent
 pas à l'intérieur. Il existe un paramètre de contrôle, le **rapport
@@ -149,7 +198,7 @@ structure « bicellulaire ».*
 
 ---
 
-## 7. Éclatement tourbillonnaire — ce que font les tornades les plus violentes
+## 8. Éclatement tourbillonnaire — ce que font les tornades les plus violentes
 
 Si l'on pousse le rapport de swirl assez haut (S ≈ 1,2 ici), le
 courant descendant central du tourbillon bicellulaire devient
@@ -175,7 +224,7 @@ multi-tourbillonnaire pendant leurs phases les plus violentes.
 
 ---
 
-## 8. La recette résumée
+## 9. La recette résumée
 
 Pour fabriquer une vraie tornade, il faut :
 
@@ -204,7 +253,7 @@ que les tornades soient relativement peu fréquentes.
 
 ---
 
-## 9. Comment lire le HUD du simulateur
+## 10. Comment lire le HUD du simulateur
 
 Une fois la simulation lancée et le tourbillon formé, le HUD en bas
 à gauche affiche une section « Validation — mesuré vs cible » qui

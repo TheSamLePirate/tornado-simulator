@@ -31,6 +31,7 @@ import { TimeDriver } from "../render/scientific/TimeDriver";
 import { VortVolume } from "../render/scientific/VortVolume";
 import { captureConfig } from "../capture/url";
 import { CaptureGate } from "../capture/CaptureGate";
+import { PresetCameraDriver } from "./PresetCameraDriver";
 import { Lightning } from "./Lightning";
 import { DOMAIN_LX, DOMAIN_LY, DOMAIN_LZ } from "../sim/grid";
 
@@ -403,6 +404,7 @@ export function Scene() {
         enableDamping={!cap.capture}
         target={[0, Wz * 0.4, 0]}
       />
+      <PresetCameraDriver />
       {!cap.capture && <Stats className="r3f-stats" />}
       {cap.capture && <CaptureGate />}
     </Canvas>

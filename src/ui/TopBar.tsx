@@ -3,6 +3,7 @@ import {
   type ScientificField,
   type ViewMode,
 } from "../state/store";
+import { SCENE_PRESETS } from "../presets/scenePresets";
 
 const VIEW_OPTIONS: Array<{ id: ViewMode; label: string }> = [
   { id: "realistic", label: "Realistic" },
@@ -249,6 +250,7 @@ export function TopBar() {
             {paused ? "▶ Resume" : "❚❚ Pause"}
           </button>
           <ReseedButton />
+          <PresetSelector />
         </div>
       </div>
 
@@ -359,5 +361,39 @@ function ReseedButton() {
     >
       ↻ Re-seed
     </button>
+  );
+}
+
+/**
+ * Dropdown that snaps the scene to one of the predefined presets used by
+ * the doc illustrations. Each option matches a PNG in `docs/illustrations/`.
+ */
+function PresetSelector() {
+  const applyPreset = useAppStore((s) => s.applyPreset);
+  const appliedPreset = useAppStore((s) => s.appliedPreset);
+  return (
+    <select
+      value={appliedPreset?.id ?? ""}
+      onChange={(e) => {
+        const id = e.target.value;
+        if (id) applyPreset(id);
+      }}
+      title="Apply a doc-illustration preset"
+      style={{
+        fontSize: 11,
+        background: "rgba(108,212,255,0.10)",
+        borderColor: "var(--accent-2, #6cd4ff)",
+        color: "var(--text)",
+        padding: "3px 6px",
+        maxWidth: 180,
+      }}
+    >
+      <option value="">📷 Doc preset…</option>
+      {SCENE_PRESETS.map((p) => (
+        <option key={p.id} value={p.id} title={p.description}>
+          {p.label}
+        </option>
+      ))}
+    </select>
   );
 }

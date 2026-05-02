@@ -4,6 +4,7 @@ import { makeGrid, type GridSpec, type QualityPreset } from "../sim/grid";
 import { Solver } from "../sim/Solver";
 import { Particles } from "../sim/Particles";
 import { Reductions, type ReductionResult } from "../sim/Reductions";
+import { SCENE_PRESETS, type ScenePreset } from "../presets/scenePresets";
 
 export type ViewMode = "realistic" | "scientific";
 export type ScientificField =
@@ -88,6 +89,18 @@ interface AppState {
   setShowVortVolume: (v: boolean) => void;
   vortVolumeDensity: number;
   setVortVolumeDensity: (v: number) => void;
+
+  /**
+   * The most-recently-applied scene preset (or null if none). The
+   * `<PresetCameraDriver/>` inside the Canvas reacts to this changing
+   * by repositioning the camera and re-seeding the solver. Cleared back
+   * to null automatically once applied so the same preset can be re-applied.
+   */
+  appliedPreset: ScenePreset | null;
+  /** Pulse counter incremented every time `applyPreset` runs (allows re-applying the same preset). */
+  presetPulse: number;
+  applyPreset: (id: string) => void;
+  clearAppliedPreset: () => void;
 }
 
 const initialPreset: QualityPreset = "medium";
@@ -169,4 +182,47 @@ export const useAppStore = create<AppState>((set) => ({
   setShowVortVolume: (v) => set({ showVortVolume: v }),
   vortVolumeDensity: 0.4,
   setVortVolumeDensity: (v) => set({ vortVolumeDensity: v }),
+
+  appliedPreset: null,
+  presetPulse: 0,
+  applyPreset: (id) => {
+    const preset = SCENE_PRESETS.find((p) => p.id === id);
+    if (!preset) return;
+    set((s) => {
+      const next: Partial<AppState> = {
+        appliedPreset: preset,
+        presetPulse: s.presetPulse + 1,
+      };
+      if (preset.params) next.params = { ...s.params, ...preset.params };
+      if (preset.viewMode !== undefined) next.viewMode = preset.viewMode;
+      if (preset.field !== undefined) next.field = preset.field;
+      if (preset.sliceXZ !== undefined) next.sliceXZ = preset.sliceXZ;
+      if (preset.sliceXY !== undefined) next.sliceXY = preset.sliceXY;
+      if (preset.isoValue !== undefined) next.isoValue = preset.isoValue;
+      if (preset.isoShellCount !== undefined)
+        next.isoShellCount = preset.isoShellCount;
+      if (preset.isoShellSpread !== undefined)
+        next.isoShellSpread = preset.isoShellSpread;
+      if (preset.showIso !== undefined) next.showIso = preset.showIso;
+      if (preset.showGlyphs !== undefined) next.showGlyphs = preset.showGlyphs;
+      if (preset.showStreamlines !== undefined)
+        next.showStreamlines = preset.showStreamlines;
+      if (preset.showContours !== undefined)
+        next.showContours = preset.showContours;
+      if (preset.contourCount !== undefined)
+        next.contourCount = preset.contourCount;
+      if (preset.showLIC !== undefined) next.showLIC = preset.showLIC;
+      if (preset.licStrength !== undefined)
+        next.licStrength = preset.licStrength;
+      if (preset.magnitudeFadeAlpha !== undefined)
+        next.magnitudeFadeAlpha = preset.magnitudeFadeAlpha;
+      if (preset.fadeFloor !== undefined) next.fadeFloor = preset.fadeFloor;
+      if (preset.showVortVolume !== undefined)
+        next.showVortVolume = preset.showVortVolume;
+      if (preset.vortVolumeDensity !== undefined)
+        next.vortVolumeDensity = preset.vortVolumeDensity;
+      return next;
+    });
+  },
+  clearAppliedPreset: () => set({ appliedPreset: null }),
 }));
