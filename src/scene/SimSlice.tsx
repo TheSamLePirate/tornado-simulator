@@ -337,7 +337,7 @@ export function SimSlice({
     <mesh
       rotation={rotation}
       position={[0, yOffset, zOffset]}
-      renderOrder={axis === "xz" ? 7 : 7.1}
+      renderOrder={axis === "xz" ? 7.1 : 7}
     >
       <planeGeometry args={planeArgs} />
       <primitive object={material} attach="material" />
