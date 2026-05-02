@@ -5,6 +5,7 @@ import { TopBar } from "./ui/TopBar";
 import { ParamPanel } from "./ui/ParamPanel";
 import { HUD } from "./ui/HUD";
 import { Colorbar } from "./ui/Colorbar";
+import { captureConfig } from "./capture/url";
 
 type Support = "checking" | "ok" | "missing";
 
@@ -34,6 +35,14 @@ export default function App() {
 
   if (support === "checking") return null;
   if (support === "missing") return <WebGPUUnavailable />;
+
+  // Capture mode hides every UI overlay so the canvas fills the document
+  // unobstructed. The Playwright capture script relies on this to land
+  // a pixel-clean PNG of the scene only.
+  if (captureConfig.capture) {
+    return <Scene />;
+  }
+
   return (
     <>
       <Scene />

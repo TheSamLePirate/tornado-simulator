@@ -29,6 +29,8 @@ import { VectorGlyphs } from "../render/scientific/VectorGlyphs";
 import { Streamlines } from "../render/scientific/Streamlines";
 import { TimeDriver } from "../render/scientific/TimeDriver";
 import { VortVolume } from "../render/scientific/VortVolume";
+import { captureConfig } from "../capture/url";
+import { CaptureGate } from "../capture/CaptureGate";
 import { Lightning } from "./Lightning";
 import { DOMAIN_LX, DOMAIN_LY, DOMAIN_LZ } from "../sim/grid";
 
@@ -293,19 +295,60 @@ function SimContent() {
   );
 }
 
+/**
+ * Spherical → Cartesian for the URL-driven camera placement.
+ * az: rotation around world Y, deg. 0 = +X, 90 = +Z (toward viewer).
+ * elev: tilt above horizon, deg. 0 = horizon-level, 90 = directly above.
+ * dist: multiplier on the largest box dimension.
+ */
+function cameraFromSpherical(
+  azDeg: number,
+  elevDeg: number,
+  dist: number,
+): [number, number, number] {
+  const az = (azDeg * Math.PI) / 180;
+  const el = (elevDeg * Math.PI) / 180;
+  const r = Math.max(Wx, Wy, Wz) * dist;
+  return [
+    r * Math.cos(el) * Math.sin(az),
+    r * Math.sin(el) + Wz * 0.4,
+    r * Math.cos(el) * Math.cos(az),
+  ];
+}
+
 export function Scene() {
   const viewMode = useAppStore((s) => s.viewMode);
   const realistic = viewMode === "realistic";
 
-  return (
+  const cap = captureConfig;
+  const cameraPos: [number, number, number] =
+    cap.cameraAz !== null && cap.cameraElev !== null && cap.cameraDist !== null
+      ? cameraFromSpherical(cap.cameraAz, cap.cameraElev, cap.cameraDist)
+      : [Wx * 1.5, Wz * 1.1, Wy * 1.5];
+
+  // Capture mode: fixed-size wrapper so the canvas pixel dimensions are
+  // predictable regardless of the headless browser's viewport. Default
+  // 1280×720; URL `w` and `h` override.
+  const wrapperStyle: React.CSSProperties | undefined = cap.capture
+    ? {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: cap.width,
+        height: cap.height,
+        background: "#000",
+      }
+    : undefined;
+
+  const canvas = (
     <Canvas
       camera={{
-        position: [Wx * 1.5, Wz * 1.1, Wy * 1.5],
+        position: cameraPos,
         fov: 45,
         near: 0.01,
         far: 500,
       }}
-      dpr={1}
+      dpr={cap.dpr}
       gl={async (props) => {
         const renderer = new WebGPURenderer({
           canvas: props.canvas as HTMLCanvasElement,
@@ -355,8 +398,15 @@ export function Scene() {
         </>
       )}
       <SimContent />
-      <OrbitControls makeDefault enableDamping target={[0, Wz * 0.4, 0]} />
-      <Stats className="r3f-stats" />
+      <OrbitControls
+        makeDefault
+        enableDamping={!cap.capture}
+        target={[0, Wz * 0.4, 0]}
+      />
+      {!cap.capture && <Stats className="r3f-stats" />}
+      {cap.capture && <CaptureGate />}
     </Canvas>
   );
+
+  return wrapperStyle ? <div style={wrapperStyle}>{canvas}</div> : canvas;
 }

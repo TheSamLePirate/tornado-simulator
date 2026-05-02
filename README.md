@@ -70,6 +70,87 @@ already wired:
 - [ ] **M9** — validation HUD (cyclostrophic balance, two-cell
   indicator, mass conservation) + perf tuning
 
+## Capture pipeline
+
+Programmatic PNG capture of the live WebGPU scene — for generating
+documentation figures. Drives the running app (no OS screenshots,
+no separate render path) via Playwright + headless Chromium.
+
+### Quick start
+
+```bash
+# Terminal 1 — dev server
+bun dev
+
+# Terminal 2 — capture a single shot
+bun capture --recipe vorticity-tube-iso
+
+# Or run all 9 predefined shots into docs/illustrations/
+bun capture --all
+
+# Or fully custom (mirrors the URL-param API)
+bun capture \
+  --view scientific --field vorticity --show-iso \
+  --vmax 100 --swirl 0.85 --rh 0.92 \
+  --camera-az 35 --camera-elev 25 --camera-dist 1.4 \
+  --w 1280 --h 720 --settle 240 \
+  --out docs/illustrations/custom.png
+```
+
+### How it works
+
+When the app sees `?capture=1` on its URL it:
+
+1. Reads every other recognised query param from `src/capture/url.ts` and
+   pushes them into the zustand store (e.g. `?Vmax=120&swirlRatio=1.0`).
+2. Hides every UI overlay (TopBar, HUD, Colorbar, ParamPanel, Stats).
+3. Forces a fixed canvas size (`?w=…&h=…`, default 1280×720) and bumps
+   `dpr` to 2 for crisp output.
+4. Re-seeds the solver so the Burgers-Rott IC matches the URL params.
+5. Runs `?settle=N` solver frames (default 240 ≈ 12 s sim time at the
+   built-in `timeScale=15`), then auto-pauses and sets
+   `window.__simReady = true`.
+
+The Playwright script in `scripts/capture.ts` polls for that flag, then
+either calls `window.__sceneSnapshot()` (preferred — `canvas.toBlob` PNG)
+or falls back to `page.locator('canvas').screenshot()`.
+
+### URL parameter reference
+
+All `SimParams` keys are accepted verbatim: `Vmax`, `Rmax`, `swirlRatio`,
+`inflow`, `z0`, `T0`, `P0`, `RH`, `Ustorm`, `Vstorm`, `tilt`, `Cs`,
+`vortConfine`, `latentHeat`.
+
+View / scientific knobs: `viewMode`, `field`, `paused`, `sliceXZ`,
+`sliceXY`, `isoValue`, `isoShellCount`, `isoShellSpread`, `showIso`,
+`showGlyphs`, `showStreamlines`, `showContours`, `contourCount`,
+`showLIC`, `licStrength`, `magnitudeFadeAlpha`, `fadeFloor`,
+`showVortVolume`, `vortVolumeDensity`.
+
+Camera (spherical): `cameraAz` (°), `cameraElev` (°), `cameraDist`
+(× max box dim). Boolean flags accept `1` / `true` / `on`.
+
+### Recipes
+
+`scripts/capture-recipes.ts` defines 9 named shots covering the most
+useful illustrations: `funnel-wide-side`, `vorticity-tube-iso`,
+`pressure-deficit-slice`, `two-cell-low-S` / `two-cell-high-S`,
+`lcl-low-rh` / `lcl-high-rh`, `multi-vortex-high-S`, `speed-LIC`.
+
+Add a new shot by appending to that file's `RECIPES` array.
+
+### Intended workflow with an AI assistant
+
+1. Ask Claude to write a tornado-physics primer / vulgarisation doc.
+2. Claude drafts prose and identifies ~6–10 illustrative figures.
+3. For each figure, Claude runs `bun capture --recipe …` (or a custom
+   `bun capture --view … --vmax … --out …`).
+4. Claude reads each PNG (multimodal) and embeds it as
+   `![](docs/illustrations/foo.png)` in the markdown doc.
+
+The PNGs are real WebGPU output, so any future shader work or simulator
+upgrade is reflected automatically — no separate render path to maintain.
+
 ## Stack
 
 | Concern | Choice |
