@@ -2,6 +2,13 @@
 
 > 🌪️ **Démo en direct** : <https://tornado-sim.puter.site/>
 
+<p align="center">
+  <video src="docs/tornade-plumes-paon.mp4" controls autoplay loop muted playsinline width="720">
+    Votre navigateur ne supporte pas la balise vidéo HTML5 —
+    <a href="docs/tornade-plumes-paon.mp4">télécharger la vidéo</a>.
+  </video>
+</p>
+
 Simulateur de tornade scientifiquement crédible, entièrement dans le
 navigateur, basé sur **Bun + Vite + React + TypeScript + Three.js
 (WebGPURenderer)**.
