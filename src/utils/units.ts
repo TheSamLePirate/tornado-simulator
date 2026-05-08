@@ -1,5 +1,5 @@
-/** Convert m/s to mph. */
-export const msToMph = (v: number): number => v * 2.2369362921;
+/** Convert m/s to km/h. */
+export const msToKmh = (v: number): number => v * 3.6;
 
 /** Convert Pa to hPa (millibars). */
 export const paToHpa = (p: number): number => p * 0.01;

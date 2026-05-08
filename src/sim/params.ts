@@ -48,7 +48,7 @@ export interface SimParams {
 
 export const DEFAULT_PARAMS: SimParams = {
   Rmax: 150, // tight core → stronger curvature, sharp vortex tube
-  Vmax: 95, // strong EF4 (≈ 213 mph)
+  Vmax: 95, // strong EF4 (≈ 342 km/h)
   swirlRatio: 0.75, // past two-cell transition → multi-vortex structure can emerge
   inflow: 18, // strong driving inflow
   z0: 0.03, // moderately rough surface (farmland / scattered trees)
