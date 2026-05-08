@@ -2,18 +2,68 @@
 
 > 🌪️ **Démo en direct** : <https://tornade-sim.puter.site/>
 > &nbsp; · &nbsp;
+> 🌀 **Autre simulation interactive** par Phantom (PhantomBlast28 sur TikTok,
+> @phantomblast666) : <https://tornade-phantom.puter.site/>
+> &nbsp; · &nbsp;
 > 📦 **Code source** : <https://github.com/TheSamLePirate/tornado-simulator>
 >
-> Chaque illustration de cette doc a un **preset correspondant** dans
-> l'application — utilisez le menu déroulant "📷 Doc preset…" en haut
-> de l'app pour voir n'importe quelle figure en direct, navigable à
-> la souris, avec les vrais paramètres derrière.
+> Chaque illustration de cette doc a un **préréglage correspondant** dans
+> l'application — utilisez le menu "📷 Préréglage…" pour voir n'importe
+> quelle figure en direct, navigable à la souris ou au doigt, avec les
+> vrais paramètres derrière.
 
 Une explication illustrée à partir des sorties en direct du simulateur.
 Chaque image ci-dessous est une vraie capture PNG du canvas WebGPU —
 pas de schéma, pas d'illustration de manuel. Ce que vous voyez,
 c'est ce que le solveur Navier–Stokes a réellement produit à partir
 des paramètres indiqués dans chaque légende.
+
+---
+
+## Comment utiliser l'application
+
+L'application démarre directement en **vue scientifique**, la plus utile
+pour comprendre la tornade. La vue présente un cube de simulation WebGPU :
+les coupes colorées, les lignes de courant et les isosurfaces sont toutes
+calculées à partir du champ de vent simulé.
+
+### Sur mobile
+
+- Le panneau principal est en bas de l'écran.
+- **Champ** choisit ce que l'on visualise : vitesse, pression, vorticité,
+  nuage, température, etc.
+- Le menu **📷 Préréglage…**, juste à droite de **Champ**, charge les vues
+  qui correspondent aux figures de cette documentation.
+- **↻ Réinit.** relance l'état initial avec les paramètres actuels.
+- **📘 Doc** ouvre cette documentation.
+- **Options** ouvre un panneau déroulant. Faites défiler ce panneau pour
+  accéder aux couches, coupes, contraste, isosurfaces, pause et autres
+  réglages actifs.
+- Le petit panneau **Params** en haut à droite est volontairement replié :
+  ouvrez-le seulement si vous voulez modifier les paramètres physiques du
+  modèle.
+- La carte en haut de la simulation indique le **titre de la vue** et sa
+  **légende de couleurs** ; elle reste proche du cube pour pouvoir lire la
+  scène sans chercher ailleurs.
+
+### Sur ordinateur
+
+- Les commandes principales sont en haut à gauche.
+- Les boutons de **champ** (`|V|`, `V_θ`, `V_r`, `V_z`, `ΔP`, `|ω|`,
+  `nuage`, `T'`) changent la grandeur affichée.
+- Les boutons de **couches** activent ou masquent les isosurfaces, flèches,
+  lignes de courant, contours, LIC, fondu et volume de vorticité.
+- Les curseurs règlent les coupes `XZ` et `XY`, le contraste du champ, et
+  les paramètres propres aux couches actives.
+- **📷 Préréglage…** charge une scène prête à commenter ; **📘 Doc** ouvre
+  cette page ; **↻ Réinit.** relance la simulation avec les paramètres
+  courants.
+- Le panneau **Paramètres** en haut à droite est replié par défaut. Ouvrez-le
+  pour modifier `Rmax`, `Vmax`, le rapport de rotation `S`, l'afflux, la
+  température, l'humidité, etc.
+- Le panneau en bas à gauche affiche uniquement des **mesures réelles de la
+  simulation** lues depuis le GPU : vitesse maximale, chute de pression,
+  vorticité maximale et âge des données.
 
 ---
 
@@ -329,26 +379,21 @@ que les tornades soient relativement peu fréquentes.
 
 ## 11. Comment lire le HUD du simulateur
 
-Une fois la simulation lancée et le tourbillon formé, le HUD en bas
-à gauche affiche une section « Validation — mesuré vs cible » qui
-note la solution. Chaque ligne est une grandeur que le simulateur
-mesure *directement sur le GPU* et la compare à la cible analytique :
+Une fois la simulation lancée et le tourbillon formé, le HUD affiche
+uniquement des valeurs **réellement mesurées dans la simulation** — pas
+des objectifs théoriques ni des valeurs saisies dans les paramètres.
+Ces mesures viennent d'une réduction GPU du champ 3D :
 
-- **|V|_max** — devrait approcher le `V_max` configuré une fois que
-  l'afflux aux frontières a rempli l'intérieur.
-- **ΔP cœur** — devrait approcher la cible cyclostrophique
-  −ρ · V_max².
-- **|ω|_max** — devrait approcher 2 · V_max / R_max, le pic de
-  Burgers–Rott.
+- **|V|max** — vitesse maximale réellement présente dans le domaine.
+- **Vent** — conversion de cette vitesse maximale en mph.
+- **ΔP min** — chute de pression minimale simulée, convertie en hPa.
+- **|ω|max** — vorticité maximale réellement mesurée.
+- **Âge données** — temps depuis la dernière lecture GPU réussie.
+- **IPS** — images par seconde.
 
-Une pastille verte signifie écart < 15 % ; ambre < 40 % ; rouge
-au-delà.
-
-Si tout est vert, la tornade que vous regardez est un véritable
-tourbillon cyclostrophique équilibré. Si quelque chose est rouge,
-c'est soit que le forçage aux frontières n'est pas assez fort
-(augmentez `V_in` ou `S`), soit que la dissipation numérique
-l'emporte (augmentez `vortConfine` ou `latentHeat`).
+Sur mobile, le HUD est volontairement compact : il affiche seulement
+l'intensité EF déduite du vent simulé, la vitesse maximale mesurée et
+les IPS. Le détail complet reste disponible sur ordinateur.
 
 ---
 

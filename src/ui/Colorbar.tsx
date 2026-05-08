@@ -1,202 +1,159 @@
-import { useAppStore, type ScientificField } from "../state/store";
+import { type ScientificField, useAppStore } from '../state/store'
 
 /** Colormap CSS gradients approximating the TSL polynomial colormaps. */
 const CMAP_CSS: Record<string, string> = {
-  viridis:
-    "linear-gradient(to top, #440154, #31688e, #21918c, #5ec962, #fde725)",
-  magma: "linear-gradient(to top, #000004, #3b0f70, #8c2981, #de4968, #fcfdbf)",
-  plasma:
-    "linear-gradient(to top, #0d0887, #6a00a8, #b12a90, #e16462, #f0f921)",
-  rdbu: "linear-gradient(to top, #2166ac, #67a9cf, #f7f7f7, #ef8a62, #b2182b)",
-};
+  viridis: 'linear-gradient(to right, #440154, #31688e, #21918c, #5ec962, #fde725)',
+  magma: 'linear-gradient(to right, #000004, #3b0f70, #8c2981, #de4968, #fcfdbf)',
+  plasma: 'linear-gradient(to right, #0d0887, #6a00a8, #b12a90, #e16462, #f0f921)',
+  rdbu: 'linear-gradient(to right, #2166ac, #67a9cf, #f7f7f7, #ef8a62, #b2182b)',
+}
 
 interface FieldMeta {
-  name: string;
-  unit: string;
-  cmap: string;
-  range: (vMax: number, rMax: number) => [number, number];
-  description: string;
+  /** Presentation title shown above the simulation cube. */
+  title: string
+  /** Short scientific symbol used beside the unit. */
+  name: string
+  unit: string
+  cmap: string
+  range: (vMax: number, rMax: number) => [number, number]
+  /** Plain-language one-liner for non-expert viewers. */
+  whatWeSee: string
+  /** Color legend helper text. */
+  legend: string
 }
 
 const FIELDS: Record<ScientificField, FieldMeta> = {
   speed: {
-    name: "|V|",
-    unit: "m/s",
-    cmap: "viridis",
+    title: 'Vitesse du vent',
+    name: '|V|',
+    unit: 'm/s',
+    cmap: 'viridis',
     range: (v) => [0, v],
-    description:
-      "Wind speed magnitude. Bright regions mark the vortex core and near-surface inflow jet where air accelerates toward the axis.",
+    whatWeSee:
+      'L’air le plus rapide se concentre dans le cœur du vortex et dans l’afflux près du sol.',
+    legend: 'Sombre = air calme · Jaune = vent le plus fort',
   },
   vtheta: {
-    name: "V_θ",
-    unit: "m/s",
-    cmap: "rdbu",
+    title: 'Vitesse de rotation',
+    name: 'V_θ',
+    unit: 'm/s',
+    cmap: 'rdbu',
     range: (v) => [-v / 2, v / 2],
-    description:
-      "Tangential (swirl) velocity. Red = counter-clockwise rotation, blue = clockwise. The Rankine-like peak at the core radius drives the pressure deficit.",
+    whatWeSee:
+      'Les vents qui tournent autour de la tornade ; les couleurs opposées indiquent des sens de rotation opposés.',
+    legend: 'Bleu = horaire · Blanc = faible · Rouge = antihoraire',
   },
   vradial: {
-    name: "V_r",
-    unit: "m/s",
-    cmap: "rdbu",
+    title: 'Afflux et reflux',
+    name: 'V_r',
+    unit: 'm/s',
+    cmap: 'rdbu',
     range: (v) => [-v / 4, v / 4],
-    description:
-      "Radial velocity relative to the vortex axis. Blue = inflow converging toward the core, red = outflow. Strong inflow at low levels feeds the updraft.",
+    whatWeSee:
+      'L’air près du sol converge vers le cœur, puis est redirigé vers le haut dans la tornade.',
+    legend: 'Bleu = flux entrant · Blanc = neutre · Rouge = flux sortant',
   },
   vz: {
-    name: "V_z",
-    unit: "m/s",
-    cmap: "rdbu",
+    title: 'Courants ascendants et descendants',
+    name: 'V_z',
+    unit: 'm/s',
+    cmap: 'rdbu',
     range: (v) => [-v * 0.4, v * 0.4],
-    description:
-      "Vertical velocity. Red = updraft (air rising in the core), blue = downdraft. A two-cell vortex shows a central downdraft surrounded by an annular updraft.",
+    whatWeSee:
+      'L’air qui monte forme le courant ascendant principal ; les zones bleues montrent l’air qui descend.',
+    legend: 'Bleu = courant descendant · Blanc = neutre · Rouge = courant ascendant',
   },
   pressure: {
-    name: "ΔP",
-    unit: "m²/s²",
-    cmap: "rdbu",
+    title: 'Chute de pression',
+    name: 'ΔP',
+    unit: 'm²/s²',
+    cmap: 'rdbu',
     range: (v) => [-(v * v) / 4, (v * v) / 4],
-    description:
-      "Pressure deviation from ambient (kinematic). The deep blue minimum at the axis is the cyclostrophic deficit that balances centrifugal force in the core.",
+    whatWeSee:
+      'Le centre de basse pression qui attire l’air vers l’intérieur et resserre le vortex.',
+    legend: 'Bleu = pression plus basse · Blanc = ambiant · Rouge = pression plus haute',
   },
   vorticity: {
-    name: "|ω|",
-    unit: "s⁻¹",
-    cmap: "magma",
+    title: 'Intensité de rotation',
+    name: '|ω|',
+    unit: 's⁻¹',
+    cmap: 'magma',
     range: (v, r) => [0, (v / Math.max(r, 1)) * 4],
-    description:
-      "Vorticity magnitude (curl of velocity). Highlights the concentrated vortex tube and any secondary sub-vortices orbiting the main axis.",
+    whatWeSee:
+      'Les zones où l’écoulement tourne le plus fort : tube principal et petites structures tournantes.',
+    legend: 'Sombre = rotation faible · Clair = rotation intense',
   },
   cloud: {
-    name: "ρ_c",
-    unit: "kg/m³",
-    cmap: "plasma",
+    title: 'Eau nuageuse visible',
+    name: 'ρ_c',
+    unit: 'kg/m³',
+    cmap: 'plasma',
     range: () => [0, 5e-4],
-    description:
-      "Cloud water density. Condensation forms above the lifting condensation level (LCL) where moist air cools adiabatically. Brighter = denser visible funnel.",
+    whatWeSee:
+      'Les endroits où l’air humide se condense en entonnoir nuageux lorsque la pression baisse.',
+    legend: 'Sombre = air clair · Jaune = nuage plus dense',
   },
   temperature: {
+    title: 'Anomalie de température',
     name: "T'",
-    unit: "K",
-    cmap: "rdbu",
+    unit: 'K',
+    cmap: 'rdbu',
     range: () => [-10, 10],
-    description:
-      "Temperature deviation from the dry-adiabatic profile, linearised: ΔT ≈ T₀·(R/cp)·ΔP/P₀. Blue cold spot at the vortex axis = adiabatic cooling driven by the pressure deficit. Red = warm regions (rare in the core).",
+    whatWeSee:
+      'L’air plus froid apparaît dans le cœur de basse pression ; les couleurs chaudes signalent l’air au-dessus du profil de référence.',
+    legend: 'Bleu = plus froid · Blanc = référence · Rouge = plus chaud',
   },
-};
+}
 
 function fmtVal(v: number): string {
-  const a = Math.abs(v);
-  if (a >= 1000) return v.toFixed(0);
-  if (a >= 1) return v.toFixed(1);
-  if (a >= 0.01) return v.toFixed(3);
-  return v.toExponential(1);
+  const a = Math.abs(v)
+  if (a >= 1000) return v.toFixed(0)
+  if (a >= 1) return v.toFixed(1)
+  if (a >= 0.01) return v.toFixed(3)
+  return v.toExponential(1)
 }
 
 /**
- * HTML overlay showing the active colormap, field name, physical units,
- * and min/max labels. Visible only in scientific mode.
+ * Presentation-focused scientific overlay. It sits above the simulation cube
+ * so viewers can identify the active field and read the color legend without
+ * looking away from the main scene.
  */
 export function Colorbar() {
-  const viewMode = useAppStore((s) => s.viewMode);
-  const field = useAppStore((s) => s.field);
-  const params = useAppStore((s) => s.params);
-  const fieldScale = useAppStore((s) => s.fieldScale);
+  const viewMode = useAppStore((s) => s.viewMode)
+  const field = useAppStore((s) => s.field)
+  const params = useAppStore((s) => s.params)
+  const fieldScale = useAppStore((s) => s.fieldScale)
 
-  if (viewMode !== "scientific") return null;
+  if (viewMode !== 'scientific') return null
 
-  const meta = FIELDS[field];
-  const scale = fieldScale[field] ?? 1.0;
-  const [loBase, hiBase] = meta.range(params.Vmax, params.Rmax);
-  const lo = loBase * scale;
-  const hi = hiBase * scale;
-  const gradient = CMAP_CSS[meta.cmap] ?? CMAP_CSS.viridis;
+  const meta = FIELDS[field]
+  const scale = fieldScale[field] ?? 1.0
+  const [loBase, hiBase] = meta.range(params.Vmax, params.Rmax)
+  const lo = loBase * scale
+  const hi = hiBase * scale
+  const gradient = CMAP_CSS[meta.cmap] ?? CMAP_CSS.viridis
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        right: 16,
-        bottom: 60,
-        display: "flex",
-        gap: 6,
-        alignItems: "stretch",
-        zIndex: 10,
-        pointerEvents: "none",
-        userSelect: "none",
-      }}
-    >
-      {/* Labels column */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          fontSize: 10,
-          color: "var(--text-dim, #999)",
-          lineHeight: 1,
-          padding: "2px 0",
-        }}
-      >
-        <span>{fmtVal(hi)}</span>
-        <span
-          style={{
-            fontSize: 11,
-            color: "var(--text-h, #eee)",
-            fontWeight: 600,
-          }}
-        >
-          {meta.name}
-        </span>
-        <span>{fmtVal(lo)}</span>
+    <section className="panel scientific-overlay" aria-label={`Vue scientifique : ${meta.title}`}>
+      <div className="scientific-overlay__title">
+        {meta.title}
+        <span className="mono scientific-overlay__symbol">{meta.name}</span>
       </div>
 
-      {/* Gradient bar */}
-      <div
-        style={{
-          width: 14,
-          height: 140,
-          borderRadius: 3,
-          background: gradient,
-          border: "1px solid rgba(255,255,255,0.12)",
-        }}
-      />
-
-      {/* Unit label */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          fontSize: 9,
-          color: "var(--text-dim, #888)",
-          writingMode: "vertical-rl",
-          textOrientation: "mixed",
-          letterSpacing: 0.5,
-        }}
-      >
-        {meta.unit}
+      <div className="scientific-overlay__legend-row">
+        <LegendValue value={lo} />
+        <div className="scientific-overlay__gradient" style={{ background: gradient }}>
+          <div className="mono scientific-overlay__unit">{meta.unit}</div>
+        </div>
+        <LegendValue value={hi} />
       </div>
 
-      {/* Field description */}
-      <div
-        style={{
-          position: "absolute",
-          right: 0,
-          top: "calc(100% + 8px)",
-          width: 200,
-          fontSize: 10,
-          lineHeight: 1.4,
-          color: "var(--text-dim, #999)",
-          background: "rgba(10, 12, 16, 0.75)",
-          borderRadius: 4,
-          padding: "6px 8px",
-          border: "1px solid rgba(255,255,255,0.08)",
-        }}
-      >
-        {meta.description}
-      </div>
-    </div>
-  );
+      <div className="scientific-overlay__legend-text">{meta.legend}</div>
+      <div className="scientific-overlay__description">{meta.whatWeSee}</div>
+    </section>
+  )
+}
+
+function LegendValue({ value }: { value: number }) {
+  return <span className="mono scientific-overlay__value">{fmtVal(value)}</span>
 }
