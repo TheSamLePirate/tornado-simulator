@@ -2,6 +2,7 @@
   "name": "tornado-simulator",
   "private": true,
   "version": "0.0.0",
+  "license": "Unlicense",
   "type": "module",
   "scripts": {
     "dev": "vite",

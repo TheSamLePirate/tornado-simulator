@@ -203,4 +203,6 @@ Pour ajouter un shot, ajoutez-le au tableau `RECIPES` de ce fichier.
 
 ## Licence
 
-(à préciser)
+[The Unlicense](LICENSE) — domaine public. Faites-en ce que vous voulez :
+copier, modifier, redistribuer, utiliser commercialement, sans attribution
+requise, sans demander.
