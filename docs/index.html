@@ -791,6 +791,324 @@
   .spread-img figcaption .sym { color: var(--acc); }
 
   /* ============================================================
+     LONG-FORM EXPLAINER — magazine feature
+     ============================================================ */
+  .wrap-prose {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 clamp(1.4rem, 3.5vw, 3.5rem);
+  }
+  .lf-intro {
+    margin-bottom: clamp(3rem, 6vh, 5rem);
+    padding-bottom: clamp(2rem, 4vh, 3rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .lf-intro p {
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin-bottom: 1rem;
+  }
+  .lf-intro p strong { color: var(--ink); font-weight: 500; }
+  .lf-intro .links-list {
+    margin: 1.5rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.84rem;
+  }
+  .lf-intro .links-list a {
+    color: var(--ink);
+    transition: color 0.15s;
+  }
+  .lf-intro .links-list a:hover { color: var(--acc); }
+  .lf-intro .links-list .lead-icon {
+    color: var(--acc);
+    margin-right: 0.5em;
+  }
+
+  /* App usage — compact accordion */
+  .app-usage {
+    margin: clamp(2rem, 4vh, 3rem) 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .app-usage summary {
+    cursor: pointer;
+    padding: 1.4rem 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--ink);
+    transition: color 0.15s;
+  }
+  .app-usage summary::-webkit-details-marker { display: none; }
+  .app-usage summary::after {
+    content: '+';
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 1.2rem;
+    color: var(--acc);
+    transition: transform 0.2s;
+  }
+  .app-usage[open] summary::after { content: '−'; }
+  .app-usage summary:hover { color: var(--acc); }
+  .app-usage .usage-body {
+    padding: 0 0 2rem;
+    border-top: 1px solid var(--rule);
+  }
+  .app-usage h4 {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    margin: 1.5rem 0 0.8rem;
+    color: var(--ink);
+  }
+  .app-usage h4:first-of-type { margin-top: 1.5rem; }
+  .app-usage ul {
+    list-style: none;
+    margin-bottom: 1rem;
+  }
+  .app-usage li {
+    padding: 0.4rem 0 0.4rem 1.6rem;
+    color: var(--ink-2);
+    font-size: 1rem;
+    line-height: 1.5;
+    position: relative;
+  }
+  .app-usage li::before {
+    content: '·';
+    position: absolute;
+    left: 0.4rem;
+    color: var(--acc);
+    font-weight: 700;
+  }
+  .app-usage li code, .app-usage li strong { color: var(--ink); }
+  .app-usage code {
+    background: var(--bg-warm);
+    padding: 0.05em 0.35em;
+    border-radius: 2px;
+    font-size: 0.86em;
+  }
+
+  /* Chapter blocks */
+  .lf-chapter {
+    padding: clamp(3rem, 7vh, 5rem) 0;
+    position: relative;
+  }
+  .lf-chapter + .lf-chapter { border-top: 1px solid var(--rule); }
+
+  .ch-head {
+    margin-bottom: 2.5rem;
+  }
+  .ch-num {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 0.9;
+    color: var(--acc);
+    letter-spacing: -0.04em;
+    margin-bottom: 0.8rem;
+  }
+  .ch-num small {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 0.18em;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.3em;
+    font-weight: 500;
+  }
+  .ch-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.04;
+    color: var(--ink);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+  .ch-title em { color: var(--acc); font-style: italic; }
+
+  .ch-body p {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: clamp(1.05rem, 1.3vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 1.4rem;
+    max-width: 65ch;
+  }
+  .ch-body p strong { color: var(--ink); font-weight: 600; }
+  .ch-body p em { font-style: italic; }
+  .ch-body p code {
+    background: var(--bg-warm);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    font-size: 0.86em;
+    color: var(--acc);
+  }
+
+  /* Drop cap on first paragraph */
+  .dropcap::first-letter {
+    float: left;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 4.8em;
+    line-height: 0.78;
+    margin: 0.04em 0.12em -0.05em 0;
+    color: var(--acc);
+    font-weight: 400;
+  }
+
+  /* Figure inside long-form */
+  .lf-figure {
+    margin: 2.5rem 0;
+  }
+  .lf-figure img {
+    width: 100%;
+    background: #050608;
+    border: 1px solid var(--rule-2);
+    display: block;
+  }
+  .lf-figure figcaption {
+    margin-top: 0.9rem;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 60ch;
+  }
+  .lf-figure figcaption strong { color: var(--ink); font-weight: 500; }
+
+  /* Preset call-out */
+  .preset-cue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0.6rem 0 2.4rem;
+    padding: 0.5rem 0.9rem;
+    background: var(--bg-warm);
+    border: 1px solid var(--rule-2);
+    border-left: 2px solid var(--acc);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-2);
+  }
+  .preset-cue::before {
+    content: '▶';
+    color: var(--acc);
+  }
+  .preset-cue em {
+    color: var(--ink);
+    font-style: italic;
+    font-family: 'Instrument Serif', serif;
+    font-size: 1rem;
+  }
+
+  /* Formula block */
+  .formula-block {
+    margin: 1.6rem 0 2rem;
+    padding: 1.4rem 1.6rem;
+    background: var(--bg-warm);
+    border-left: 2px solid var(--acc);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.96rem;
+    color: var(--ink);
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+
+  /* Pull quote inline */
+  .lf-pq {
+    margin: 2.5rem 0;
+    padding: 1.5rem 0 1.5rem 1.5rem;
+    border-left: 2px solid var(--acc);
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+    line-height: 1.25;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .lf-pq em { color: var(--acc); }
+
+  /* Numbered list (recipe) */
+  .recipe-list {
+    list-style: none;
+    counter-reset: recipe;
+    margin: 1.4rem 0 2rem;
+    max-width: 70ch;
+  }
+  .recipe-list li {
+    counter-increment: recipe;
+    padding: 0 0 1.4rem 3.5rem;
+    position: relative;
+    color: var(--ink);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+  .recipe-list li::before {
+    content: counter(recipe);
+    position: absolute;
+    left: 0;
+    top: -0.1em;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--acc);
+  }
+  .recipe-list li strong { color: var(--ink); font-weight: 600; }
+  .recipe-list li em { color: var(--acc); font-family: 'Instrument Serif', serif; font-style: italic; }
+
+  /* HUD list */
+  .hud-list {
+    list-style: none;
+    margin: 1.4rem 0 1.5rem;
+  }
+  .hud-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: minmax(120px, 0.4fr) 1fr;
+    column-gap: 1.4rem;
+    color: var(--ink-2);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .hud-list li code,
+  .hud-list li strong {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--acc);
+    font-size: 0.92rem;
+    font-weight: 600;
+    background: none;
+    padding: 0;
+  }
+
+  /* Closing colophon note */
+  .lf-closing {
+    margin-top: clamp(3rem, 6vh, 5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink-3);
+    line-height: 1.6;
+  }
+  .lf-closing code { color: var(--acc); font-family: 'JetBrains Mono', monospace; font-style: normal; }
+
+  /* ============================================================
      STACK — minimal index
      ============================================================ */
   .index {
@@ -1085,6 +1403,7 @@
       <a href="#what">Le projet</a>
       <a href="#plates">Galerie</a>
       <a href="#physics">Physique</a>
+      <a href="#explication">Explication</a>
       <a href="#stack">Stack</a>
     </nav>
     <a class="pill" href="https://tornado-sim.puter.site/" target="_blank" rel="noopener" data-link>Lancer la sim →</a>
@@ -1408,8 +1727,320 @@
     </article>
 
     <p style="margin-top:3rem;font-family:'Instrument Serif',serif;font-style:italic;color:var(--ink-2);font-size:1.15rem">
-      → <a href="tornado-explainer.fr.md" style="color:var(--acc);border-bottom:1px solid var(--acc)" data-link>Lire la version longue, illustrée — 10 sections.</a>
+      → <a href="#explication" style="color:var(--acc);border-bottom:1px solid var(--acc)" data-link>Lire la version longue, illustrée — 11 chapitres.</a>
     </p>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- EXPLICATION TORNADE — long-form magazine feature -->
+<!-- ====================================================== -->
+<section id="explication">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num"><small>n° 04</small><em>Explication.</em></div>
+      <p class="sec-deck">La version longue, illustrée — 11 chapitres pour comprendre comment fonctionne une tornade en suivant les sorties réelles du simulateur. Chaque image est une vraie capture du canvas WebGPU — pas de schéma, pas d'illustration de manuel.</p>
+    </div>
+  </div>
+
+  <div class="wrap-prose">
+
+    <!-- INTRO -->
+    <div class="lf-intro">
+      <p>Une explication illustrée à partir des sorties en direct du simulateur. Chaque image ci-dessous est une vraie capture PNG du canvas WebGPU — <strong>pas de schéma, pas d'illustration de manuel</strong>. Ce que vous voyez, c'est ce que le solveur Navier&ndash;Stokes a réellement produit à partir des paramètres indiqués dans chaque légende.</p>
+      <div class="links-list">
+        <a href="https://tornado-sim.puter.site/" target="_blank" rel="noopener" data-link><span class="lead-icon">🌪️</span>Démo en direct · tornado-sim.puter.site</a>
+        <a href="https://tornade-phantom.puter.site/" target="_blank" rel="noopener" data-link><span class="lead-icon">🌀</span>Autre simulation par Phantom · tornade-phantom.puter.site</a>
+        <a href="https://github.com/TheSamLePirate/tornado-simulator" target="_blank" rel="noopener" data-link><span class="lead-icon">📦</span>Code source · github.com/TheSamLePirate/tornado-simulator</a>
+      </div>
+      <p>Chaque illustration de cette doc a un <strong>préréglage correspondant</strong> dans l'application — utilisez le menu « 📷 Préréglage… » pour voir n'importe quelle figure en direct, navigable à la souris ou au doigt, avec les vrais paramètres derrière.</p>
+    </div>
+
+    <!-- COMMENT UTILISER L'APPLICATION -->
+    <details class="app-usage">
+      <summary>Comment utiliser l'application</summary>
+      <div class="usage-body">
+        <p style="font-family:'Inter Tight',sans-serif;font-size:1.02rem;line-height:1.6;color:var(--ink-2);max-width:60ch;margin-top:1.4rem">
+          L'application démarre directement en <strong>vue scientifique</strong>, la plus utile pour comprendre la tornade. La vue présente un cube de simulation WebGPU : les coupes colorées, les lignes de courant et les isosurfaces sont toutes calculées à partir du champ de vent simulé.
+        </p>
+
+        <h4>Sur mobile</h4>
+        <ul>
+          <li>Le panneau principal est en bas de l'écran.</li>
+          <li><strong>Champ</strong> choisit ce que l'on visualise : vitesse, pression, vorticité, nuage, température, etc.</li>
+          <li>Le menu <strong>📷 Préréglage…</strong>, juste à droite de <strong>Champ</strong>, charge les vues qui correspondent aux figures de cette documentation.</li>
+          <li><strong>↻ Réinit.</strong> relance l'état initial avec les paramètres actuels.</li>
+          <li><strong>📘 Doc</strong> ouvre cette documentation.</li>
+          <li><strong>Options</strong> ouvre un panneau déroulant. Faites défiler ce panneau pour accéder aux couches, coupes, contraste, isosurfaces, pause et autres réglages actifs.</li>
+          <li>Le petit panneau <strong>Params</strong> en haut à droite est volontairement replié : ouvrez-le seulement si vous voulez modifier les paramètres physiques du modèle.</li>
+          <li>La carte en haut de la simulation indique le <strong>titre de la vue</strong> et sa <strong>légende de couleurs</strong> ; elle reste proche du cube pour pouvoir lire la scène sans chercher ailleurs.</li>
+        </ul>
+
+        <h4>Sur ordinateur</h4>
+        <ul>
+          <li>Les commandes principales sont en haut à gauche.</li>
+          <li>Les boutons de <strong>champ</strong> (<code>|V|</code>, <code>V_θ</code>, <code>V_r</code>, <code>V_z</code>, <code>ΔP</code>, <code>|ω|</code>, <code>nuage</code>, <code>T'</code>) changent la grandeur affichée.</li>
+          <li>Les boutons de <strong>couches</strong> activent ou masquent les isosurfaces, flèches, lignes de courant, contours, LIC, fondu et volume de vorticité.</li>
+          <li>Les curseurs règlent les coupes <code>XZ</code> et <code>XY</code>, le contraste du champ, et les paramètres propres aux couches actives.</li>
+          <li><strong>📷 Préréglage…</strong> charge une scène prête à commenter ; <strong>📘 Doc</strong> ouvre cette page ; <strong>↻ Réinit.</strong> relance la simulation avec les paramètres courants.</li>
+          <li>Le panneau <strong>Paramètres</strong> en haut à droite est replié par défaut. Ouvrez-le pour modifier <code>Rmax</code>, <code>Vmax</code>, le rapport de rotation <code>S</code>, l'afflux, la température, l'humidité, etc.</li>
+          <li>Le panneau en bas à gauche affiche uniquement des <strong>mesures réelles de la simulation</strong> lues depuis le GPU : vitesse maximale, chute de pression, vorticité maximale et âge des données.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- CHAPITRE 1 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 1</small>I.</div>
+        <h2 class="ch-title">Qu'est-ce qu'une tornade ?</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Une tornade est une colonne d'air en rotation violente reliant un nuage d'orage en altitude au sol. Son trait caractéristique est la <strong>vorticité</strong> — une mesure de l'intensité du tourbillonnement local en chaque point. Si l'on trace les régions où la vorticité dépasse un certain seuil, on obtient ceci :</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/vorticity-tube-iso.png" alt="Isosurface de vorticité, trois enveloppes imbriquées">
+          <figcaption>Trois enveloppes imbriquées de |ω| (norme de la vorticité) à des seuils croissants. <strong>L'enveloppe extérieure bleue</strong> marque « là où ça tourne » ; l'enveloppe intérieure orange indique le cœur en rotation violente. Le sol est en bas, la base du nuage serait juste au-dessus du cadre.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« Tube de vorticité (iso) »</em></aside>
+
+        <p>Le tube est <strong>étroit mais haut</strong> — typiquement 50 à 500 m de diamètre, sur plusieurs kilomètres de hauteur. À l'intérieur du tube, les vents peuvent dépasser 100 m/s (échelons EF4&ndash;EF5 sur l'échelle de Fujita améliorée).</p>
+
+        <p>Vu en coupe plutôt qu'en isosurface, le même tube ressemble à ça :</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/vorticity-slice.png" alt="Coupe de vorticité — colonne magenta + anneau au sol">
+          <figcaption>Coupes XZ et XY de la vorticité. La <strong>colonne magenta</strong> sur la coupe verticale, c'est la concentration de rotation au cœur. Au sol, on voit l'<strong>anneau</strong> correspondant — c'est la signature du mur de l'œil au ras du sol. Les stries pâles qui descendent le long du tube trahissent la structure hélicoïdale fine de l'écoulement turbulent.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« Coupe de |ω| »</em></aside>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 2 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 2</small>II.</div>
+        <h2 class="ch-title">La signature : <em>rotation</em> autour d'un axe vertical.</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Si l'on coupe horizontalement la base du tube et que l'on colorie la vitesse <strong>tangentielle</strong> du vent (positive = sens trigonométrique vu d'en haut), l'empreinte d'un tourbillon saute aux yeux :</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/vtheta-top-down.png" alt="V_θ vue du dessus — anneau rose autour d'un cœur calme">
+          <figcaption>Vitesse tangentielle V_θ sur une coupe horizontale à z ≈ 50 m. Rose = forte rotation antihoraire (positive) ; blanc = calme. <strong>L'anneau lumineux</strong> est le mur de l'œil — une bande étroite où la vitesse atteint son maximum. À l'extérieur de l'anneau, le vent décroît ; à l'intérieur, il décroît aussi vers un cœur quasi immobile. C'est le profil du <strong>tourbillon de Rankine combiné</strong>.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« V_θ (vue du dessus) »</em></aside>
+
+        <p>Le rayon de cet anneau est l'un des deux nombres qui définissent une tornade : <code>R_max</code> — la distance entre l'axe et le pic de vent. Le pic lui-même est <code>V_max</code>. <strong>Ces deux valeurs résument à elles seules la taille et la puissance du phénomène.</strong></p>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 3 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 3</small>III.</div>
+        <h2 class="ch-title">D'où vient l'air ?</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">L'air ne tourne pas indéfiniment dans une boucle fermée — il doit venir de quelque part et aller quelque part. La vitesse <strong>radiale</strong> (composante du vent dirigée vers l'axe ou s'en éloignant) révèle l'afflux :</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/vradial-top-down.png" alt="V_r vue du dessus — bleu diffus, air qui converge">
+          <figcaption>Vitesse radiale V_r sur la même coupe horizontale basse. <strong>Bleu = afflux</strong> (air se dirigeant vers l'axe), rouge = sortie (absente ici). L'air au ras du sol est aspiré <strong>vers l'intérieur</strong> depuis toutes les directions.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« V_r (vue du dessus) »</em></aside>
+
+        <p class="lf-pq">Cet afflux doit bien aller quelque part — et comme il ne peut s'accumuler sur l'axe, il monte. La tornade est essentiellement un <em>gigantesque tube aspirant</em>.</p>
+
+        <p>Convergence horizontale au sol, courant ascendant vertical jusque dans l'orage parent. Ce courant ascendant se voit directement sur la composante verticale du vent V_z :</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/vz-default.png" alt="V_z — colonne rose ascendante">
+          <figcaption>Vitesse verticale V_z aux paramètres par défaut (V_max = 95 m/s, S = 0,75). Rose/rouge = ascendance, blanc = quasi calme. La <strong>colonne rose</strong> au centre est le courant ascendant qui propulse l'air aspiré par l'afflux jusque dans le nuage convectif. À S = 0,75 (juste au-dessus du seuil bicellulaire), la concentration est déjà très serrée le long de l'axe.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« V_z par défaut »</em></aside>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 4 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 4</small>IV.</div>
+        <h2 class="ch-title">Le déficit de pression — et pourquoi l'air se précipite.</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Pourquoi l'air converge-t-il, au juste ? La deuxième loi de Newton : pour qu'une parcelle d'air décrive un cercle, il faut une <strong>force centripète</strong> dirigée vers l'axe. La nature la fournit via un <strong>gradient de pression</strong> — la pression doit être plus basse au centre qu'à l'extérieur, de sorte que l'air soit « pressé » vers l'intérieur.</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/pressure-deficit-slice.png" alt="ΔP — colonne bleue cyclostrophique">
+          <figcaption>Écart de pression ΔP par rapport à l'ambiant. Rose = au-dessus de l'ambiant, bleu = au-dessous. La <strong>colonne bleu profond</strong> le long de l'axe du tourbillon est le déficit cyclostrophique, où ΔP ≈ −ρ · V_max². À V_max = 95 m/s avec ρ ≈ 1,2 kg/m³, cela donne environ <strong>−110 hPa</strong> — soit <strong>environ 10 % de moins que la pression atmosphérique au niveau de la mer</strong>, dans une colonne d'à peine 50 m de large.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« Déficit de pression »</em></aside>
+
+        <p class="lf-pq">C'est ce déficit qui détruit réellement les bâtiments : les vents violents tirent sur la structure pendant que la <em>chute de pression</em> tente d'arracher la toiture.</p>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 5 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 5</small>V.</div>
+        <h2 class="ch-title">Conséquence directe — le <em>refroidissement adiabatique</em>.</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Le déficit de pression du chapitre précédent a une autre conséquence, et c'est elle qui rend la tornade visible : <strong>quand un gaz se détend, il se refroidit</strong>. C'est la loi de l'adiabatique sèche, qu'on apprend au lycée et qui décrit ce qui se passe à chaque instant dans l'atmosphère.</p>
+
+        <p>Mathématiquement, pour un gaz parfait subissant une transformation sans échange de chaleur :</p>
+
+        <pre class="formula-block">T_local = T₀ · (p_local / p_référence)^(R/c_p)</pre>
+
+        <p>avec <code>R/c_p ≈ 0,286</code> pour l'air sec. Concrètement : si la pression chute de 10 % à température constante d'origine, la température chute d'environ 3 %. Au cœur d'une tornade EF4 où ΔP atteint −100 hPa (soit −10 % de la pression atmosphérique normale), cela donne <strong>ΔT ≈ −9 K</strong>.</p>
+
+        <p>On peut directement visualiser ce refroidissement dans le simulateur :</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/temperature-cold-spot.png" alt="T' — colonne magenta-bleue sur l'axe">
+          <figcaption>Coupe XZ et slab XY de la déviation de température T' (par rapport à l'isentrope sèche locale). Bleu = plus froid, rouge = plus chaud. La <strong>colonne magenta-bleue</strong> sur l'axe est exactement la même région que la colonne bleue de la coupe de pression précédente — ce sont deux visualisations du même phénomène : la décompression centripète qui refroidit l'air en montant le long du tube. Les zones décolorées autour ont une déviation proche de zéro.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« T' (refroidissement adiabatique) »</em></aside>
+
+        <p>Comparez les deux presets dans l'app : <em>« Déficit de pression »</em> et <em>« T' (refroidissement adiabatique) »</em> montrent la même structure spatiale dans deux palettes différentes. C'est la <strong>cause</strong> (la chute de pression) et l'<strong>effet</strong> (la chute de température), strictement liés par l'équation ci-dessus.</p>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 6 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 6</small>VI.</div>
+        <h2 class="ch-title">Le nuage funnel — pourquoi <em>on voit</em> la tornade.</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Le déficit de pression a une conséquence visible : l'air qui spirale vers l'axe se détend en montant ; en se détendant, il refroidit ; et en refroidissant suffisamment, sa vapeur d'eau <strong>se condense</strong>. C'est ce qui rend la tornade visible — un nuage en forme d'entonnoir descend depuis la base du nuage convectif jusqu'au sol.</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/cloud-side-view.png" alt="Funnel cloud — entonnoir condensé">
+          <figcaption>Coupe XZ de la densité d'eau condensée ρ_c (colormap plasma). <strong>Le plafond rose</strong> uniforme, c'est la base du nuage convectif au-dessus du <strong>niveau de condensation par soulèvement</strong> (LCL). En dessous, l'air est trop chaud et trop sec pour qu'il y ait de la condensation — sauf le long de l'axe du tourbillon, où le déficit cyclostrophique abaisse la pression au point que la condensation y descend en <strong>entonnoir</strong> quasiment jusqu'au sol. C'est précisément la silhouette caractéristique d'une tornade.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« Funnel (nuage condensé) »</em></aside>
+
+        <p>L'humidité ambiante détermine la hauteur du LCL — plus l'air est sec, plus le LCL est haut, plus le funnel reste « accroché » au nuage et ne touche pas le sol. Une tornade dans de l'air sec est donc en grande partie <strong>invisible</strong> : seul le nuage de poussière soulevé au sol trahit son existence.</p>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 7 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 7</small>VII.</div>
+        <h2 class="ch-title">La vue d'ensemble — visualisation par <em>LIC</em>.</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Jusqu'ici, nous avons découpé le vent en V_θ, V_r, V_z — mais le flux réel est une <strong>spirale tourbillonnante</strong> combinant les trois. En traçant la <strong>norme</strong> du vent avec une <strong>convolution par intégrale linéaire</strong> (LIC) par-dessus, on capture tout en une seule image :</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/speed-LIC.png" alt="|V| + LIC — anneau jaune au mur de l'œil">
+          <figcaption>Coupe de |V| avec grain LIC dans le sens du flux. Jaune = vitesse élevée (mur de l'œil, ~80 à 95 m/s), sombre = calme. En regardant de près, on aperçoit les <strong>fines stries qui filent tangentiellement</strong> le long du mur de l'œil — c'est le noyau LIC qui révèle la direction de l'écoulement à chaque pixel. Le slab horizontal au sol donne la cible classique : mur de l'œil lumineux, œil sombre, halo qui s'estompe dans la zone d'afflux.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« |V| + LIC »</em></aside>
+
+        <p>C'est exactement ce que donnerait une superposition <strong>radar Doppler réflectivité-et-vitesse</strong> d'une vraie tornade, à beaucoup plus fine résolution.</p>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 8 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 8</small>VIII.</div>
+        <h2 class="ch-title">Unicellulaire vs bicellulaire — le <em>rapport de swirl</em>.</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Détail subtil mais important : toutes les tornades ne se ressemblent pas à l'intérieur. Il existe un paramètre de contrôle, le <strong>rapport de swirl</strong> S — grossièrement, le rapport entre la rotation de l'air au bord du domaine et son afflux radial. Le franchissement d'un seuil critique (<code>S ≈ 0,6</code>, le <strong>seuil de Davies-Jones</strong>) fait basculer le tourbillon dans un régime différent.</p>
+
+        <p><strong>Faible swirl (S = 0,4) — tourbillon unicellulaire :</strong></p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/two-cell-low-S.png" alt="V_z à S=0.4 — unicellulaire">
+          <figcaption>V_z au rapport de swirl 0,4. Le tourbillon est <strong>unicellulaire</strong> : l'air monte partout le long de l'axe. Le tube est laminaire, la colonne est un courant ascendant continu et homogène.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« V_z à S = 0.4 (unicellulaire) »</em></aside>
+
+        <p><strong>Swirl plus élevé (S = 0,85) — colonne étroite et concentrée :</strong></p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/two-cell-high-S.png" alt="V_z à S=0.85 — bicellulaire">
+          <figcaption>Même vue à S = 0,85. Le courant ascendant s'est resserré en une colonne d'une intensité éclatante. Dans les vraies tornades (et à des résolutions de grille plus fines que cette simulation 96³), le centre de la colonne deviendrait en réalité <strong>négatif</strong> — un courant descendant plongeant le long de l'axe pendant que l'ascendance migrerait vers un anneau juste à l'extérieur. C'est l'iconique <strong>structure « bicellulaire »</strong>.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« V_z à S = 0.85 (bicellulaire) »</em></aside>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 9 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 9</small>IX.</div>
+        <h2 class="ch-title">Éclatement tourbillonnaire — ce que font les tornades les plus violentes.</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Si l'on pousse le rapport de swirl assez haut (<code>S ≈ 1,2</code> ici), le courant descendant central du tourbillon bicellulaire devient instable. Le tube unique <strong>se fragmente en 2 à 6 sous-tourbillons</strong> qui orbitent autour de l'axe principal comme des engrenages d'un système planétaire.</p>
+
+        <p class="lf-pq">Les vitesses de vent à <em>l'intérieur</em> des sous-tourbillons s'ajoutent à la rotation du tourbillon parent — produisant localement les vents les plus rapides jamais mesurés dans l'atmosphère (~140 m/s, ~500 km/h).</p>
+
+        <figure class="lf-figure">
+          <img src="illustrations/multi-vortex-high-S.png" alt="Multi-vortex S=1.2">
+          <figcaption>Coupes de vorticité à S = 1,2 avec V_max = 100 m/s. Le slab horizontal en bas trahit le phénomène : au lieu d'un seul anneau lumineux, on voit <strong>plusieurs taches lumineuses arrangées en spirale</strong> — chacune un sous-tourbillon. La coupe verticale révèle que le tube est passé d'une colonne lisse à une texture striée, presque peignée, à mesure que les sous-tourbillons remontent.</figcaption>
+        </figure>
+        <aside class="preset-cue">Preset app : <em>« Multi-tourbillonnaire (S = 1.2) »</em></aside>
+
+        <p>Les tornades d'<strong>El Reno (2013)</strong>, de <strong>Hackleburg (2011)</strong> et de <strong>Greensburg (2007)</strong> ont toutes été observées en configuration multi-tourbillonnaire pendant leurs phases les plus violentes.</p>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 10 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 10</small>X.</div>
+        <h2 class="ch-title">La recette résumée.</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Pour fabriquer une vraie tornade, il faut quatre ingrédients réunis au même endroit, au même moment :</p>
+
+        <ol class="recipe-list">
+          <li><strong>De l'air chaud et humide en surface</strong> — le carburant de l'ascendance par flottabilité. Le simulateur le gère via le paramètre <em>chaleur latente</em> : à mesure que l'air humide s'élève dans le nuage et se condense, il libère de la chaleur latente qui entretient l'ascendance, qui aspire plus d'afflux, qui génère plus de rotation. La boucle s'auto-alimente.</li>
+          <li><strong>De l'air froid et sec en altitude</strong> — accroît le contraste thermique, déstabilise la colonne, rend la convection violente.</li>
+          <li><strong>Du cisaillement de vent dans la basse atmosphère</strong> — fournit la vorticité d'axe horizontal que l'ascendance bascule en vorticité verticale pour amorcer la rotation.</li>
+          <li><strong>Un déclencheur</strong> — la supercellule parente et son mésocyclone, qui mettent en rotation la graine pendant de longues minutes avant que la tornade ne touche réellement le sol.</li>
+        </ol>
+
+        <p>S'il manque un seul de ces ingrédients, on a de la pluie, on a un orage, on a un <em>gustnado</em> — mais pas de tornade. <strong>Avoir les quatre réunis au même endroit est météorologiquement rare</strong>, ce qui explique que les tornades soient relativement peu fréquentes.</p>
+      </div>
+    </article>
+
+    <!-- CHAPITRE 11 -->
+    <article class="lf-chapter">
+      <header class="ch-head">
+        <div class="ch-num"><small>chapitre 11</small>XI.</div>
+        <h2 class="ch-title">Comment lire le HUD du simulateur.</h2>
+      </header>
+      <div class="ch-body">
+        <p class="dropcap">Une fois la simulation lancée et le tourbillon formé, le HUD affiche uniquement des valeurs <strong>réellement mesurées dans la simulation</strong> — pas des objectifs théoriques ni des valeurs saisies dans les paramètres. Ces mesures viennent d'une réduction GPU du champ 3D :</p>
+
+        <ul class="hud-list">
+          <li><code>|V|max</code><span>vitesse maximale réellement présente dans le domaine.</span></li>
+          <li><code>Vent</code><span>conversion de cette vitesse maximale en mph.</span></li>
+          <li><code>ΔP min</code><span>chute de pression minimale simulée, convertie en hPa.</span></li>
+          <li><code>|ω|max</code><span>vorticité maximale réellement mesurée.</span></li>
+          <li><code>Âge données</code><span>temps depuis la dernière lecture GPU réussie.</span></li>
+          <li><code>IPS</code><span>images par seconde.</span></li>
+        </ul>
+
+        <p>Sur mobile, le HUD est volontairement compact : il affiche seulement l'intensité EF déduite du vent simulé, la vitesse maximale mesurée et les IPS. <strong>Le détail complet reste disponible sur ordinateur.</strong></p>
+      </div>
+    </article>
+
+    <!-- CLOSING NOTE -->
+    <p class="lf-closing">
+      Toutes les figures ont été générées avec <code>bun capture --recipe …</code> (ou des paramètres personnalisés) directement depuis le canvas WebGPU de ce simulateur. Pour les regénérer, assurez-vous que <code>bun dev</code> tourne, puis lancez <code>bun capture --all</code> pour rafraîchir toutes les illustrations dans <code>docs/illustrations/</code>.
+    </p>
+
   </div>
 </section>
 
@@ -1419,7 +2050,7 @@
 <section id="stack">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-num"><small>n° 04</small>Stack.</div>
+      <div class="sec-num"><small>n° 05</small>Stack.</div>
       <p class="sec-deck">Construit pour le navigateur d'aujourd'hui — pas de fallback CPU, pas de WebGL. L'intégralité du solveur tourne en compute shaders sur le GPU via TSL.</p>
     </div>
 
@@ -1451,7 +2082,7 @@
 <section>
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-num"><small>n° 05</small>Lancer.</div>
+      <div class="sec-num"><small>n° 06</small>Lancer.</div>
       <p class="sec-deck">Aucune installation. Aucune inscription. Si votre navigateur supporte WebGPU (Chrome / Edge ≥ 113, Safari macOS Tahoe / iOS 26+, Firefox ≥ 147), ça marche.</p>
     </div>
 
