@@ -64,7 +64,7 @@
   }
   .display-italic, h1 em, h2 em { font-style: italic; }
 
-  h1 { font-size: clamp(3rem, 11vw, 11rem); }
+  h1 { font-size: clamp(2rem, 6.4vw, 6rem); }
   h2 { font-size: clamp(2.4rem, 7vw, 5.5rem); }
   h3 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); line-height: 1.04; }
 
@@ -227,10 +227,17 @@
     position: relative;
   }
 
-  /* Massive title row */
+  /* Single-line title row */
   .hero-title {
-    margin-bottom: clamp(3rem, 8vh, 7rem);
-    padding-right: 4vw;
+    margin-bottom: clamp(2rem, 4vh, 3.5rem);
+    padding-right: 0;
+  }
+  .hero-title h1 {
+    white-space: nowrap;
+    overflow: visible;
+  }
+  @media (max-width: 760px) {
+    .hero-title h1 { white-space: normal; }
   }
   .hero-title h1 {
     color: var(--ink);
@@ -1417,11 +1424,7 @@
   <div class="wrap">
 
     <div class="hero-title reveal" style="--delay:0.05s">
-      <h1>
-        <span class="line">Une vraie</span>
-        <span class="line">tornade<span class="punc">,</span></span>
-        <span class="line"><em>instrumentée.</em></span>
-      </h1>
+      <h1>Une vraie tornade <em>instrumentée</em>.</h1>
     </div>
 
     <div class="hero-grid">
