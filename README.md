@@ -1,6 +1,6 @@
 # Simulateur de tornade
 
-> 🌪️ **Démo en direct** : <https://tornade-simulation.puter.site/>
+> 🌪️ **Démo en direct** : <https://tornade-sim.puter.site/>
 
 Simulateur de tornade scientifiquement crédible, entièrement dans le
 navigateur, basé sur **Bun + Vite + React + TypeScript + Three.js
@@ -42,7 +42,7 @@ nécessaires, et comment lire le HUD du simulateur.
 Chaque illustration de la doc a un **preset correspondant dans
 l'application**. La marche à suivre :
 
-1. Ouvrir <https://tornade-simulation.puter.site/>
+1. Ouvrir <https://tornade-sim.puter.site/>
 2. Lire la doc en parallèle
 3. Pour chaque figure, repérer la ligne `▶ Preset app : « ... »` sous
    la légende
