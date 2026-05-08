@@ -1,6 +1,6 @@
 # How a tornado works
 
-> 🌪️ **Live demo**: <https://tornade-sim.puter.site/>
+> 🌪️ **Live demo**: <https://tornado-sim.puter.site/>
 > &nbsp; · &nbsp;
 > 📦 **Source**: <https://github.com/TheSamLePirate/tornado-simulator>
 >

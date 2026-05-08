@@ -1,6 +1,6 @@
 # Comment fonctionne une tornade
 
-> 🌪️ **Démo en direct** : <https://tornade-sim.puter.site/>
+> 🌪️ **Démo en direct** : <https://tornado-sim.puter.site/>
 > &nbsp; · &nbsp;
 > 🌀 **Autre simulation interactive** par Phantom (PhantomBlast28 sur TikTok,
 > @phantomblast666) : <https://tornade-phantom.puter.site/>
